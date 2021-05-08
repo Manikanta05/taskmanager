@@ -1,11 +1,6 @@
 # taskmanager
 
-Login here https://manikanta05.github.io/taskmanager/login
+Clone all the files and folders
 
-Princi https://manikanta05.github.io/taskmanager/princi
-
-hod https://manikanta05.github.io/taskmanager/hod
-
-professor https://manikanta05.github.io/taskmanager/prof
-
-staffs https://manikanta05.github.io/taskmanager/staffs
+Open the terminal in CWD and type
+## python main.py
