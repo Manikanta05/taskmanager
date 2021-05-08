@@ -6,6 +6,6 @@ Princi https://manikanta05.github.io/taskmanager/princi
 
 hod https://manikanta05.github.io/taskmanager/hod
 
-professor https://manikanta05.github.io/taskmanager/login
+professor https://manikanta05.github.io/taskmanager/prof
 
-staffs https://manikanta05.github.io/taskmanager/staff
+staffs https://manikanta05.github.io/taskmanager/staffs
