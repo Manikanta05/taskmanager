@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOD Portal</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body{
             overflow-x: hidden;
@@ -50,6 +51,7 @@
             </li>            
           </ul>
         </div>
+        <a href="index.html"><i class="fa fa-sign-out" style="font-size:36px;color:white"></i></a>
     </nav>
 
     <div class="row">
@@ -60,14 +62,14 @@
                 <a href="#" class="nav-link">Inbox</a><br>
                 <a href="#" class="nav-link" data-toggle="modal" data-target="#exampleModal">Add Task</a><br>
                 <a href="#" class="nav-link">Portfolios</a><br>
-                <a href="/" class="nav-link">Logout</a><br>
+               <!-- <a href="/" class="nav-link">Logout</a><br>-->
                 <a href="#" class="nav-link">Help</a><br>
                 <a href="#" class="nav-link">Contact</a><br>
             </div>
         </div>
         <div class="container col-sm-8">
             <div class="col">
-                <h1 class="display-3 mt-5">Welcome {{ name }},</h1><br>
+                <h1 class="display-4 mt-5">Welcome {{ name }},</h1><br>
                 <h2 class="text-muted mutedTxt">We are happy to have you on this platform, <br> Thank you for using our app.</h2><br>
                 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#exampleModal">Add Task </button>
             </div>
