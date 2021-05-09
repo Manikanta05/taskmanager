@@ -1,17 +1,18 @@
-
-  
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prinicpal Portal</title>
+    <title>Associate Professor Portal</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body{
             overflow-x: hidden;
+        }
+        .navbg{
+            background: linear-gradient(-40deg,#006666,#00ccff);
+            border-bottom: 1px solid white;
         }
         .sidebar{
             background: linear-gradient(135deg,#006666,#003366);
@@ -39,7 +40,7 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light navbg">
         <a class="navbar-brand" href="#">Task Manager/Associate Professor</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -54,18 +55,17 @@
             </li>            
           </ul>
         </div>
-        <a href="index.html"><i class="fa fa-sign-out" style="font-size:36px;color:white"></i></a>
     </nav>
 
     <div class="row">
         <div class="col col-lg-2 col-md-2 col-sm-4 sidebar">
-            <h1 class="text-center mt-4">#</h1> <br>
+            <h1 class="text-center mt-4">~</h1> <br>
             <div class="col sidebarA">
-                <a href="./princi.html" class="nav-link">Home</a><br>
                 <a href="#" class="nav-link">Inbox</a><br>
                 <a href="#" class="nav-link">Portfolios</a><br>
-                <a href="#" class="nav-link">Assigned Task</a><br>
-                <a href="#" class="nav-link" data-toggle="modal" data-target="#exampleModal">Add Task</a><br>
+                <a href="/assignedTask" class="nav-link">Assigned Task</a><br>
+                <a href="/taskByme" class="nav-link">Task by me</a><br>
+                <a href="/" class="nav-link">Logout</a><br>
                 <a href="#" class="nav-link">Help</a><br>
                 <a href="#" class="nav-link">Contact</a><br>
             </div>
@@ -74,7 +74,7 @@
             <div class="col">
                 <h1 class="display-3 mt-5">Welcome {{ name }},</h1><br>
                 <h2 class="text-muted mutedTxt">We are happy to have you on this platform, <br> Thank you for using our app.</h2><br>
-                <button type="button" class="btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#exampleModal">Add Task </button><br><br>
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#exampleModal">Add Task </button><br><br>
             </div>
         </div>
     </div>
@@ -97,12 +97,22 @@
                     <label for="designation">Designation</label>
                     <select class="custom-select" name="designation">
                         <option selected>Choose..</option><hr>
-                        <option value="staffs">Staffs</option>
+                        <option value="Asst. Prof.">Staffs</option>
                     </select>
                 </div>
                 <div class="col col-lg-6">
                     <label for="assignees">Assignees</label>
                     <input class="form-control" type="text" name="Assignees" placeholder="Search here..."><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-lg-6">
+                    <label for="designation">Assigned By</label>
+                    <input class="form-control" name="assignedby" value={{ name }}>
+                </div>
+                <div class="col col-lg-6">
+                    <label for="assignees">Role</label>
+                    <input class="form-control" name="role" value={{ role }}><br>
                 </div>
             </div>
             <div class="row">
@@ -140,4 +150,3 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
-
