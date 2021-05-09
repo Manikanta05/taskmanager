@@ -11,7 +11,7 @@ mysql = MySQL(app)
 
 @app.route('/')
 def homePage():
-    return render_template('login.html')
+    return render_template('index.html')
 
 @app.route('/login', methods=['GET',"POST"])
 def loginValidate():
