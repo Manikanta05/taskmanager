@@ -17,6 +17,11 @@ def homePage():
 def loginPage():
     return render_template('login.html')
 
+@app.route('/contactPage')
+def contactPage():
+    return render_template('contact.html')
+
+
 Aname=''
 Arole=''
 @app.route('/login', methods=['GET',"POST"])
@@ -68,6 +73,24 @@ def taskAssign():
         mysql.connection.commit()
         cur.close()
         return 'Done'
+    else:
+        return 'Failed'
+
+
+@app.route('/contact', methods=['GET','POST'])
+def contact():
+    if request.method == 'POST':
+        namec = request.form['namec']
+        emailc = request.form['emailc']
+        phonec = request.form['phonec']
+        subc = request.form['subc']
+        msgc = request.form['msgc']
+
+        cur1 = mysql.connection.cursor()
+        cur1.execute("INSERT INTO contact(name,email,phone,subject,message) VALUES(%s,%s,%s,%s,%s)",(namec,emailc,phonec,subc,msgc))
+        mysql.connection.commit()
+        cur1.close()
+        return 'Thank you for the feedback'
     else:
         return 'Failed'
 
