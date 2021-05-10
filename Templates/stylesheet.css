@@ -4,13 +4,14 @@
 
 }
 body{
-	background: #808080;
+	background: #B0C4DE;
 	font-size: 14px;
 	font-family: 'Poppins', sans-serif;
 }
 .container{
 	width: 80%;
 	margin: 50px auto;
+	color: #483D8B;
 }
 .contact-box{
 	background: #fff;
@@ -23,7 +24,7 @@ body{
 .contact-right{
 	flex-basis: 40%;
 	padding: 40px;
-	background: #1c00b5;
+	background: #483D8B;
 	color:#fff;
 }
 h1{
@@ -57,10 +58,10 @@ textarea{
 label{
 	margin-bottom: 6px;
 	display: block;
-	color: #1c00b5;
+	color: #483D8B;
 }
 button{
-	background: #1c00b5;
+	background:#483D8B;
 	width: 100px;
 	border: none;
 	outline: none;
@@ -71,7 +72,7 @@ button{
 	box-shadow: 0px 5px 15px 0px rgba(28,0,181,0.3); 
 }
 .contact-left h2{
-	color: #1c00b5;
+	color: #483D8B;
 	font-weight:600;
 	margin-bottom: 30px
 }
