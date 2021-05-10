@@ -90,7 +90,7 @@ def contact():
         cur1.execute("INSERT INTO contact(name,email,phone,subject,message) VALUES(%s,%s,%s,%s,%s)",(namec,emailc,phonec,subc,msgc))
         mysql.connection.commit()
         cur1.close()
-        return 'Thank you for the feedback'
+        return render_template('index.html',msg='Thank you for the feedback')
     else:
         return 'Failed'
 
