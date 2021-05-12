@@ -21,6 +21,10 @@ def loginPage():
 def contactPage():
     return render_template('contact.html')
 
+@app.route('/help')
+def help():
+    return render_template('help.html')
+
 
 Aname=''
 Arole=''
@@ -90,7 +94,7 @@ def contact():
         cur1.execute("INSERT INTO contact(name,email,phone,subject,message) VALUES(%s,%s,%s,%s,%s)",(namec,emailc,phonec,subc,msgc))
         mysql.connection.commit()
         cur1.close()
-        return render_template('index.html',msg='Thank you for the feedback')
+        return render_template('index.html',msg='Thank you for the feedback, Your message has been recorded.')
     else:
         return 'Failed'
 

@@ -5,9 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
 </head>
-<body style="overflow-x: hidden;">
+<body  style="overflow-x: hidden;">
     <!--Starting Intro-->
+    {% if msg %}
+<body onload="showAlert()">
+    <script>
+        function showAlert() {
+          alert ("{{msg}}");
+        }
+        </script></body>
+    {% endif %}
+    
     <div class="container">
         <div class="row">
             <div class="col col-lg-6 mt-5">
@@ -18,6 +28,7 @@
                     <p>A free and easy tool helping educators efficiently manage and assess progress, while enhancing <br> connections with staff.</p>
                     <br/>
                     <a href="/loginPage"><button type="button" class="btn btn-primary btn-lg" style="width: 250px; margin-right:25px;">Login</button></a>
+                    <a href="/help"><button type="button" class="btn btn-primary btn-lg" style="width: 250px; margin-right:25px;">Help</button></a>
                 </div>
             </div>
             <div class="col col-lg-6">
