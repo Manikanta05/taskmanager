@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>  
+        .navbg{
+            background: linear-gradient(-40deg,#006666,#00ccff);
+            border-bottom: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbg">
+        <a class="navbar-brand" href="#">Task Manager</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+
+    <h1 class="display-3 ml-3 mb-4">Add Task</h1>
+
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-6">
+                <!-- <form action="/taskAssign" method="POST"> -->
+                    <label for="taskName">Task Name</label>
+                    <input class="form-control" type="text" name="taskName" placeholder="Add here.."> <br>
+                    
+                    <div class="row">
+                        <form action="/getNames" method="POST">                
+                            <div class="col col-lg-5">                        
+                                <label>Department</label><br>
+                                <input type="Checkbox" value="cse" name="chck">
+                                <label for="cse">CSE</label>
+                                <input type="Checkbox" value="ise" name="chck">
+                                <label for="ise">ISE</label>
+                                <input type="Checkbox" value="ece" name="chck">
+                                <label for="ece">ECE</label><br>
+                                <input type="Checkbox" value="eee" name="chck">
+                                <label for="eee">EEE</label>
+                                <input type="Checkbox" value="iem" name="chck">
+                                <label for="iem">IEM</label>
+                                <input type="Checkbox" value="me" name="chck">
+                                <label for="me">ME</label>
+                                <input type="Checkbox" value="cv" name="chck">
+                                <label for="cv">CE</label>
+                            </div>
+                            <div class="col col-lg-7">
+                                <label for="designation">Designation</label><br>
+                                <div class="row">
+                                    <div class="col col-lg-9">
+                                        {% if role == 'Principal' %}
+                                            <input type="checkbox" value="Head" name="chck2">
+                                            <label for="Head">Head of Department</label><br>
+                                        {% endif %}
+                                        {% if role == 'Head' or role == 'Principal' %}
+                                            <input type="checkbox" value="Associate Professor" name="chck2">
+                                            <label for="Associate Professor">Associate Professor</label><br>
+                                            <input type="checkbox" value="Asst. Prof." name="chck2">
+                                            <label for="Asst. Prof.">Asstistant Professor</label>
+                                        {% endif %}
+                                        {% if role == 'Associate Professor' %}
+                                            <input type="checkbox" value="Asst. Prof." name="chck2">
+                                            <label for="Asst. Prof.">Asstistant Professor</label>
+                                        {% endif %}  
+                                    </div>
+                                    <div class="col col-lg-3 mt-3">
+                                        <button type="submit" class="btn btn-success">Go</button>
+                                    </div>
+                                </div>                        
+                            </div>
+                        </form>
+                    </div><br>              
+                    
+                    <div class="row">
+                        <div class="col col-lg-6">
+                            <label for="designation">Assigned By</label>
+                            <input class="form-control" name="assignedby" value={{ name }}>
+                        </div>
+                        <div class="col col-lg-6">
+                            <label for="assignees">Role</label>
+                            <input class="form-control" name="role" value={{ role }}><br>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col col-lg-4">
+                            <label for="datein">Assigned Date</label>
+                            <input class="form-control" name="datein" type="date">
+                        </div>
+                        <div class="col col-lg-4">
+                            <label for="dateout">Due Date</label><br>
+                            <input class="form-control" name="dateout" type="date">
+                        </div>
+                        <div class="col col-lg-4">
+                            <label for="priority">Priority</label>
+                            <select class="custom-select" name="priority">
+                                <option selected>Choose..</option><hr>
+                                <option value="high" class="badge-danger">High</option><hr>
+                                <option value="medium" class="badge-warning">Medium</option><hr>
+                                <option value="low" class="badge-success">Low</option>
+                            </select>
+                        </div>
+                    </div><br>
+                    
+                    <textarea name="comment" placeholder="Comments..." cols="62" rows="3"></textarea>
+                    <div>
+                        <button type="submit" class="btn btn-success">Add Task</button>
+                    </div>
+                <!-- </form> -->
+            </div>
+            <div class="col" style="height: 63vh; overflow-y: scroll;">
+                <label for="assignees">Assignees</label> <p class="float-right">Total : {{ count }}</p><br>
+                {% for i in infos %}
+                    <li class="list-group-item list-group-item-secondary">
+                        {{ i[0] }}
+                        <input type="Checkbox" class="float-right" value={{ i }} name="chck">
+                    </li>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
