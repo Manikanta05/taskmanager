@@ -1,5 +1,8 @@
 from flask import Flask,render_template, url_for,request
 from flask_mysqldb import MySQL
+import smtplib,imghdr
+from email.message import EmailMessage
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['MYSQL_HOST']="localhost"
@@ -25,8 +28,13 @@ def contactPage():
 def helpPage():
     return render_template('help.html')
 
+@app.route('/teamPage')
+def teamPage():
+    return render_template('team.html')
+
 Aname=''
 Arole=''
+Adept=''
 @app.route('/login', methods=['GET',"POST"])
 def loginValidate():
     if request.method == 'POST':
@@ -36,21 +44,32 @@ def loginValidate():
         rows = cur.execute('SELECT * FROM logindetails WHERE emailid=%s AND passwd=%s',(email,passwd))
         if rows > 0:
             details = cur.fetchall()
-            global Aname, Arole
+            global Aname, Arole, Adept
             Aname=details[0][1]
             Arole=details[0][3]
+            Adept=details[0][2]
             if Arole == 'Principal':
                 if (email in details[0][4]) and (passwd in details[0][5]):
                     return render_template('princi.html', name=Aname,role=Arole)
+            elif Arole == 'JD':
+                if (email in details[0][4]) and (passwd in details[0][5]):
+                    return render_template('jd.html', name=Aname,role=Arole)
             elif Arole == 'Head':
                 if (email in details[0][4]) and (passwd in details[0][5]):
                     return render_template('hod.html', name=Aname,role=Arole)
+            elif Arole == 'Dean':
+                if (email in details[0][4]) and (passwd in details[0][5]):
+                    return render_template('prof.html', name=Aname,role=Arole)
+            elif Arole == 'Professor':
+                if (email in details[0][4]) and (passwd in details[0][5]):
+                    return render_template('prof.html', name=Aname,role=Arole)
             elif Arole == 'Associate Professor':
                 if (email in details[0][4]) and (passwd in details[0][5]):
                     return render_template('prof.html', name=Aname,role=Arole)
             elif Arole == 'Asst. Prof.':
                 if (email in details[0][4]) and (passwd in details[0][5]):
                     return render_template('staffs.html', name=Aname,role=Arole)
+            
         else:
             return render_template('login.html', msg='Invalid User')
         mysql.connection.commit()
@@ -62,9 +81,11 @@ def loginValidate():
 def addTaskPage():
     return render_template('AddTask.html', name=Aname, role=Arole)
 
+depList = ''
 @app.route('/taskAssign', methods=['GET','POST'])
 def taskAssign():
     if request.method == 'POST':
+        taskType = request.form.getlist('taskType')
         taskName = request.form['taskName']
         assignees = request.form.getlist('chck3')
         assignedby = request.form['assignedby']
@@ -73,34 +94,105 @@ def taskAssign():
         dateOut = str(request.form['dateout'])
         priority = request.form['priority']
         comments = request.form['comment']
+        tt=""
+        print(taskType,taskType[0])
+        if taskType[0]=="yes":
+            tt="Group Task"
+        else:
+            tt="Individual Task"
+        cur = mysql.connection.cursor()   
+        contacts = []        
+        if len(assignees) == 1 :
+            n=cur.execute('SELECT department,designation,emailid FROM logindetails where name=%s',(assignees[0],))
+            print(assignees[0])
+            depart=cur.fetchall()
+            contacts.append(depart[0][2])
+            print(depart)
+            cur.execute("INSERT INTO tasks(taskName,assignees,designation,groupTask,assignedby,role,dept,datein,dateout,priority,comments) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(taskName,assignees[0],depart[0][1],taskType,assignedby,role,depart[0][0],dateIn,dateOut,priority,comments))
+            mysql.connection.commit()
+        elif len(assignees) > 1 :
+            for i in assignees:
+                n=cur.execute('SELECT department,designation,emailid FROM logindetails where name=%s',(i,))
+                depart=cur.fetchall()
+                contacts.append(depart[0][2])
+                cur.execute("INSERT INTO tasks(taskName,assignees,designation,groupTask,assignedby,role,dept,datein,dateout,priority,comments) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(taskName,i,depart[0][1],taskType,assignedby,role,depart[0][0],dateIn,dateOut,priority,comments))
+                mysql.connection.commit()
+        else:
+            return render_template('AddTask.html', name=Aname, role=Arole, msg='Select atleast 1 Assignee', color='danger')
+        cur.close()
 
-        print(assignees)
-        # cur = mysql.connection.cursor()
-        # cur.execute("INSERT INTO tasks(taskName,designation,assignees,assignedby,role,datein,dateout,priority,comments) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",(taskName,desig,assignees,assignedby,role,dateIn,dateOut,priority,comments))
-        # mysql.connection.commit()
-        # cur.close()
-        return 'Done'
+        EMAIL_ADDRESS = "elitecoders.jss@gmail.com"
+        msg = EmailMessage()
+        msg['Subject'] = 'New task has been assigned!'
+        msg['From'] = EMAIL_ADDRESS
+        msg['To'] = contacts
+        dt_string = datetime.now().strftime("%m %B,%Y %H:%M:%S")
+        msg.set_content('New task has been assigned!')        
+        msg.add_alternative("""\
+        <!DOCTYPE html>
+        <html>
+            <body>
+            <h1 style="color:#3737b3;font-size:80px; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Task Manager</h1>
+
+        <h2 style="font-size:30px;">     
+        <mark>Taskname : """+taskName.upper()+"""</mark></h2>
+        <h3 style="color:#500050;">
+        Task Type : """+tt+"""<br>
+          Priority : """+priority.upper()+"""<br>
+        Assigned By : """+assignedby+"""<br>  
+        Assigned Date : """+dateIn+"""<br>
+        Due Date : """+dateOut+"""<br>
+        Comments : """+comments+"""
+        </h3>
+        <h4 class="text-muted">"""+dt_string+"""</h4>
+            </body>
+        </html>
+        """, subtype='html')
+        with smtplib.SMTP_SSL('smtp.gmail.com',465) as smtp:
+            smtp.login('elitecoders.jss@gmail.com','elite1234')
+            smtp.send_message(msg)
+
+        return render_template('AddTask.html', name=Aname, role=Arole, msg='Task Assigned successfully :)', color='success')
     else:
-        return 'Failed'
+        return render_template('AddTask.html', name=Aname, role=Arole, msg='Failed :(', color='danger')
 
+@app.route('/contact', methods=['GET','POST'])
+def contact():
+    if request.method == 'POST':
+        namec = request.form['namec']
+        emailc = request.form['emailc']
+        phonec = request.form['phonec']
+        subc = request.form['subc']
+        msgc = request.form['msgc']
+        print(phonec)
+        cur1 = mysql.connection.cursor()
+        cur1.execute("INSERT INTO contact(name,email,phone,subject,message) VALUES(%s,%s,%s,%s,%s)",(namec,emailc,phonec,subc,msgc))
+        mysql.connection.commit()
+        cur1.close()
+        return goBack()
+    else:
+        return render_template('contact.html',msg="Failed")
 @app.route('/getNames', methods=['GET','POST'])
 def getNames():
     if request.method == 'POST':
+        global depList
         dept = request.form.getlist('chck')
         desig = request.form.getlist('chck2')
-        print(dept)
         cur = mysql.connection.cursor()
+        listall=[]
+        depList= dept
         for i in dept:
             for j in desig:
-                rows = cur.execute('SELECT name FROM logindetails WHERE department=%s and designation=%s',(i,j))
-                if rows > 0:
-                    details = cur.fetchall()
-                    return render_template('AddTask.html', name=Aname, role=Arole, infos=details, count=rows)       
+                rows = cur.execute('SELECT name,department FROM logindetails WHERE department=%s and designation=%s',(i,j))
+                details = cur.fetchall()
+                listall.append(details)
+        return render_template('AddTask.html', name=Aname, role=Arole, infos=listall, count=len(listall))       
 
 @app.route('/taskByme')
 def taskByme():
     cur = mysql.connection.cursor()
-    rows = cur.execute('SELECT * FROM tasks WHERE assignedby=%s and role=%s',(Aname,Arole))
+    rows = cur.execute('SELECT * FROM tasks WHERE assignedby=%s and role=%s and groupTask="no" and status<>"Deleted"',(Aname,Arole))
+    print(rows,Aname,Arole)
     if rows > 0:
         details = cur.fetchall()
         mysql.connection.commit()
@@ -109,9 +201,17 @@ def taskByme():
     else:
         return render_template('TaskByMe.html', name=Aname, role=Arole, msg='No Entries yet :(')
 
-@app.route('/editInfos')
-def editInfos():
-    return 'Done'
+@app.route('/taskBymeGroup')
+def taskBymeGroup():
+    cur = mysql.connection.cursor()
+    rows = cur.execute('SELECT * FROM tasks WHERE assignedby=%s and role=%s and status<>"Deleted" and groupTask="yes" ORDER BY taskName DESC',(Aname,Arole))
+    if rows > 0:
+        details = cur.fetchall()            
+        mysql.connection.commit()
+        cur.close()
+        return render_template('taskBymeGroup.html', infos=details, name=Aname, role=Arole)
+    else:
+        return render_template('taskBymeGroup.html', name=Aname, role=Arole, msg='No Entries yet :(')
 
 @app.route('/assignedTask')
 def assignedTask():
@@ -124,24 +224,15 @@ def assignedTask():
         return render_template('AssignedTask.html', infos=details, name=Aname)
     else:
         return render_template('AssignedTask.html',  name=Aname, msg='No tasks yet :)')
-@app.route('/assignedView')
-def assignedView():
-    cur = mysql.connection.cursor()
-    rows = cur.execute('SELECT * FROM tasks WHERE department=%s',('cse',))
-    if rows > 0:
-        details = cur.fetchall()
-        mysql.connection.commit()
-        cur.close()
-        return render_template('AssignedView.html', infos=details, name=Aname,department='cse')
-    else:
-        return render_template('AssignedTask.html',  name=Aname, msg='No tasks yet :)')
 
 @app.route('/changeStatus',methods=['POST','GET'])
 def changeStatus():
     if request.method == 'POST':
+        assignedBy = request.form['assignedBy']
         currentStatus = request.form['currentStatus']
+        turnin = request.form['turnin']
         cur = mysql.connection.cursor()
-        rows = cur.execute('UPDATE tasks SET status=%s WHERE assignees=%s',(currentStatus,Aname))
+        rows = cur.execute('UPDATE tasks SET status=%s, turnedin=%s WHERE assignees=%s AND assignedby=%s',(currentStatus,turnin,Aname,assignedBy))
         mysql.connection.commit()
         cur.close()
         return assignedTask()
@@ -151,7 +242,7 @@ def changeStatus():
 @app.route('/dashboard')
 def dashboard():
     cur = mysql.connection.cursor()
-    row1 = cur.execute('SELECT * FROM tasks WHERE assignedby=%s',(Aname,))
+    row1 = cur.execute('SELECT distinct taskName FROM tasks WHERE assignedby=%s',(Aname,))
     row2 = cur.execute('SELECT * FROM tasks WHERE assignees=%s',(Aname,))
     row3 = cur.execute('SELECT * FROM tasks WHERE assignees=%s and status="Completed"',(Aname,))
     row4 = cur.execute('SELECT * FROM tasks WHERE assignees=%s and status="In Progress"',(Aname,))
@@ -159,7 +250,216 @@ def dashboard():
     cur.close()
     return render_template('Dashboard.html', name=Aname, tbm=row1, at=row2, cmp=row3, prg=row4)
 
+#For assignee
+@app.route('/remarkview',methods=['POST','GET'])
+def remarkview():
+    if request.method == 'POST':
+        tid=request.form['id']
+        tn=request.form['taskName']
+        tass=request.form['assignees']
+        tdes=request.form['designation']
+        tassb=request.form['assignedby']
+        role=request.form['role']
+        dept=request.form['dept']
+        gt=request.form['groupTask']
+        cur = mysql.connection.cursor()
+        if gt=="yes":
+            tts=cur.execute('SELECT * FROM remarks WHERE taskName=%s and assignedby=%s and role=%s order by time desc',(tn,tassb,role,))
+        else:
+            tts=cur.execute('SELECT * FROM remarks WHERE assignees=%s and taskName=%s and assignedby=%s and role=%s and dept=%s order by time desc',(tass,tn,tassb,role,dept,))
+        details1=None
+        if tts > 0:
+            details1 = cur.fetchall()
+        return render_template('remarkview.html',tid=tid,tn=tn,tass=tass,tdes=tdes,tassb=tassb,role=role,dept=dept,name=Aname,infos=details1,msg="No remarks yet")
+
+@app.route('/resetpass',methods=['POST','GET'])
+def resetpass():
+    if request.method == 'POST':
+        print('hi')
+        emailid=request.form['email']
+        currpass=request.form['cpasswd']
+        newpass=request.form['newpasswd']
+        conpass=request.form['conpasswd']
+        if newpass == conpass:
+            cur = mysql.connection.cursor()
+            rows = cur.execute('SELECT * FROM logindetails WHERE emailid=%s AND passwd=%s',(emailid,currpass))
+            if rows>0:
+                details=cur.fetchall()
+                reset=cur.execute("UPDATE logindetails SET passwd=%s WHERE emailid=%s",(newpass,emailid))
+                mysql.connection.commit()
+                cur.close()
+                return render_template('login.html', msg="Password Changed Successfully :)")
+            else:
+                return render_template('login.html', msg="Couldn't reset your password, Try Again  :( ")
+        else:
+            return render_template('login.html', msg="Password doesn't match :( ")
+    else:
+        return render_template('login.html')
+#for assigned person
+@app.route('/remarkview1',methods=['POST','GET'])
+def remarkview1():
+    if request.method == 'POST':
+        tid=request.form['id']
+        tn=request.form['taskName']
+        tass=request.form['assignees']
+        tdes=request.form['designation']
+        tassb=request.form['assignedby']
+        role=request.form['role']
+        dept=request.form['dept']
+        gt=request.form['groupTask']
+        cur = mysql.connection.cursor()        
+        if gt=="yes":
+            tts=cur.execute('SELECT * FROM remarks WHERE taskName=%s and assignedby=%s and role=%s order by time desc',(tn,tassb,role,))
+        else:
+            tts=cur.execute('SELECT * FROM remarks WHERE assignees=%s and taskName=%s and assignedby=%s and role=%s and dept=%s order by time desc',(tass,tn,tassb,role,dept,))
+        details1=None
+        if tts > 0:
+            details1 = cur.fetchall()
+        return render_template('remarkview1.html',tid=tid,tn=tn,tass=tass,tdes=tdes,tassb=tassb,role=role,dept=dept,name=Aname,infos=details1,msg="No remarks yet")
 
 
-if __name__ == '__main__':
+@app.route('/remarks',methods=['POST','GET'])
+def remarks():
+    if request.method == 'POST':
+        tid=request.form['id']
+        tn=request.form['taskName']
+        tass=request.form['assignees']
+        tdes=request.form['designation']
+        tassb=request.form['assignedby']
+        role=request.form['role']
+        dept=request.form['dept']
+        rem=request.form['remarks']
+        cur = mysql.connection.cursor()        
+        tts=cur.execute('insert into remarks (taskname,assignees,designation,assignedby,role,dept,remarks,name) values(%s,%s,%s,%s,%s,%s,%s%s)',(tn,tass,tdes,tassb,role,dept,rem,tass))
+        mysql.connection.commit()
+        cur.close()
+        return assignedTask()
+
+@app.route('/remarks1',methods=['POST','GET'])
+def remarks1():
+    if request.method == 'POST':
+        tid=request.form['id']
+        
+        tn=request.form['taskName']
+        tass=request.form['assignees']
+        tdes=request.form['designation']
+        tassb=request.form['assignedby']
+        role=request.form['role']
+        dept=request.form['dept']
+        rem=request.form['remarks']
+        cur = mysql.connection.cursor()
+        tts=cur.execute('insert into remarks (taskname,assignees,designation,assignedby,role,dept,remarks,name) values(%s,%s,%s,%s,%s,%s,%s,%s)',(tn,tass,tdes,tassb,role,dept,rem,Aname))
+        mysql.connection.commit()
+        cur.close()
+        return goBack()
+        
+
+#principaldashboard
+@app.route('/pdash',methods=['POST','GET'])
+def pdash():
+    if request.method == 'POST':
+        dept=request.form['dept']
+        cur = mysql.connection.cursor()
+        tts=cur.execute('SELECT * FROM tasks WHERE dept=%s',(dept,))
+        hods=cur.execute('SELECT * FROM tasks WHERE dept=%s AND designation="Head"',(dept,))
+        pts=cur.execute('SELECT * FROM tasks WHERE dept=%s AND designation="Professor"',(dept,))
+        aps=cur.execute('SELECT * FROM tasks WHERE dept=%s AND designation="Associate Professor"',(dept,))
+        assts=cur.execute('SELECT * FROM tasks WHERE dept=%s AND designation="Asst. Prof."',(dept,))
+        asnt1=cur.execute('SELECT * FROM tasks WHERE dept=%s and status="Assigned"',(dept,))
+        inpt1 = cur.execute('SELECT * FROM tasks WHERE status="In Progress" AND dept=%s',(dept,))
+        ct1 = cur.execute('SELECT * FROM tasks WHERE status="Completed" AND dept=%s',(dept,))
+        ot1 = cur.execute('SELECT * FROM tasks WHERE dept=%s and dateout<CURRENT_DATE() and status not in( "Completed")',(dept,))
+
+        details1=details2=details3=details4=details5=msg1=msg2=msg3=msg4=msg5=None
+        row1 = cur.execute('SELECT * FROM tasks WHERE dept=%s',(dept,))
+        if row1 > 0:
+            details1 = cur.fetchall()
+        else:
+            msg1='No tasks yet'
+        row2 = cur.execute('SELECT * FROM tasks WHERE designation="Head"and dept=%s',(dept,))
+        if row2 > 0:
+            details2 = cur.fetchall()
+        else:
+            msg2='No tasks yet'
+        row3 = cur.execute('SELECT * FROM tasks WHERE designation="Professor"and dept=%s',(dept,))
+        if row3 > 0:
+            details3 = cur.fetchall()
+        else:
+            msg3='No tasks yet'
+        row4 = cur.execute('SELECT * FROM tasks WHERE designation="Associate Professor" and dept=%s',(dept,))
+        if row4 > 0:
+            details4 = cur.fetchall()
+        else:
+            msg4='No tasks yet'
+        row5 = cur.execute('SELECT * FROM tasks WHERE designation="Asst. Prof." and dept=%s',(dept,))    
+        if row5 > 0:
+            details5 = cur.fetchall()
+        else:
+            msg5='No tasks yet'
+
+        mysql.connection.commit()
+        cur.close()
+        return render_template('princi_dash.html',role=Arole, name=Aname,dept=dept,tt=tts,hod=hods,pt=pts,ap=aps,assts=assts,asnt=asnt1,inpt=inpt1,ct=ct1,ot=ot1,infos1=details1,infos2=details2,infos3=details3,infos4=details4,infos5=details5,msg1=msg1,msg2=msg2,msg3=msg3,msg4=msg4,msg5=msg5)
+
+@app.route('/deptdashboard')
+def deptdashboard():
+    cur = mysql.connection.cursor()
+    row1 = cur.execute('SELECT * FROM tasks WHERE dept=%s',(Adept,))
+    row2 = cur.execute('SELECT * FROM tasks WHERE dept=%s AND designation="Head"',(Adept,))
+    row3 = cur.execute('SELECT * FROM tasks WHERE dept=%s AND designation="Professor"',(Adept,))
+    row4 = cur.execute('SELECT * FROM tasks WHERE dept=%s AND designation="Associate Professor"',(Adept,))
+    row5 = cur.execute('SELECT * FROM tasks WHERE dept=%s AND designation="Asst. Prof."',(Adept,))
+
+    row6 = cur.execute('SELECT * FROM tasks WHERE status="Completed" AND dept=%s AND designation="Head"',(Adept,))
+    row7 = cur.execute('SELECT * FROM tasks WHERE status="Assigned" AND dept=%s AND designation="Head"',(Adept,))
+    row8 = cur.execute('SELECT * FROM tasks WHERE status="In Progress" AND dept=%s AND designation="Head"',(Adept,))
+
+    row9 = cur.execute('SELECT * FROM tasks WHERE status="Completed" AND dept=%s AND designation="Professor"',(Adept,))
+    row10 = cur.execute('SELECT * FROM tasks WHERE status="Assigned" AND dept=%s AND designation="Professor"',(Adept,))
+    row11 = cur.execute('SELECT * FROM tasks WHERE status="In Progress" AND dept=%s AND designation="Professor"',(Adept,))
+
+    row12 = cur.execute('SELECT * FROM tasks WHERE status="Completed" AND dept=%s AND designation="Associate Professor"',(Adept,))
+    row13 = cur.execute('SELECT * FROM tasks WHERE status="Assigned" AND dept=%s AND designation="Associate Professor"',(Adept,))
+    row14 = cur.execute('SELECT * FROM tasks WHERE status="In Progress" AND dept=%s AND designation="Associate Professor"',(Adept,))
+
+    row15 = cur.execute('SELECT * FROM tasks WHERE status="Completed" AND dept=%s AND designation="Asst. Prof."',(Adept,))
+    row16 = cur.execute('SELECT * FROM tasks WHERE status="Assigned" AND dept=%s AND designation="Asst. Prof."',(Adept,))
+    row17 = cur.execute('SELECT * FROM tasks WHERE status="In Progress" AND dept=%s AND designation="Asst. Prof."',(Adept,))
+
+    mysql.connection.commit()
+    cur.close()
+    return render_template('DepartmentDashboard.html', tt=row1, th=row2, tp=row3, tap=row4, tasp=row5, tch=row6, tah=row7, tph=row8, tcp=row9, tapp=row10, tpp=row11, tcap=row12, taap=row13, tpap=row14, tcasp=row15, taasp=row16, tpasp=row17)
+
+
+@app.route('/deleteTask', methods=['GET','POST'])
+def deleteTask():
+    if request.method == 'POST':
+        taskName = request.form['taskName']
+        cur =mysql.connection.cursor()
+        rows = cur.execute('SELECT taskName FROM tasks WHERE taskName=%s',(taskName,))
+        if rows>0:
+            delte = cur.execute("UPDATE tasks SET status='Deleted' WHERE taskName=%s",(taskName,))
+            mysql.connection.commit()
+            cur.close()
+            return taskByme()
+        else:
+            return "Task doesn't exist :("
+
+@app.route('/goBack')
+def goBack():
+    if Arole == 'Principal':
+        return render_template('princi.html', name=Aname,role=Arole)
+    elif Arole == 'JD':
+        return render_template('jd.html', name=Aname,role=Arole)
+    elif Arole == 'Head':
+        return render_template('hod.html', name=Aname,role=Arole)
+    elif Arole == 'Associate Professor':
+        return render_template('prof.html', name=Aname,role=Arole)
+    elif Arole == 'Asst. Prof.':
+        return render_template('staffs.html', name=Aname,role=Arole)
+    else:
+        return "Invalid"
+
+        
+if __name__ == '__main__':    
     app.run(debug=True)

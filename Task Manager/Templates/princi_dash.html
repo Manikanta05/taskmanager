@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      {% if role=='Principal' %}
+        Principal-Dashboard
+      {% else %}
+        Joint Director-Dashboard
+      {% endif %}
+    </title>
+    <link rel="icon" href="{{ url_for('static', filename='/images/p2.ico') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body{
+            overflow-x: hidden;
+        }
+        .navbg{
+            background: linear-gradient(-40deg,#006666,#00ccff);
+            border-bottom: 1px solid white;
+        }
+        .sidebar{
+            background: linear-gradient(135deg,#006666,#003366);
+            height: 92vh;
+        }
+        .sidebar > h1 {
+            color: white;
+        }
+        .sidebarA > a{
+            color: white;
+            font-size: 1.15em;
+            border-bottom: 0.5px solid white;
+        }
+        .sidebarA > a:hover{
+            border: none;
+            background: linear-gradient(45deg,#33cccc,#006666);
+            border-radius: 20px;
+        }
+        .mutedTxt{
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+    </style>
+    <script>
+       
+        window.onload = function () {
+          CanvasJS.addColorSet("greenShades",
+                [//colorSet Array
+
+                "#003329",
+                "#008066",
+                "#00e6b8",
+                "#80ffe5"               
+                ]);
+                    
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            theme: "light2", // "light1", "light2", "dark1", "dark2"
+            colorSet: "greenShades",
+            title:{
+                text: "Count"
+            },
+            data: [{        
+                type: "column",  
+                showInLegend: true, 
+
+                dataPoints: [      
+                    { y: {{asnt}}, label: "Assigned Task" },
+                    { y: {{inpt}},  label: "In Progress" },
+                    { y: {{ct}},  label: "Completed Task" },
+                    { y: {{ot}},  label: "Overdue Tasks" }
+                ]
+            }]
+        });
+        chart.render();
+        
+        }
+   
+
+        </script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbg">
+        <a class="navbar-brand" href="#">
+          {% if role =='Principal' %}
+            Principal-Dashboard
+          {% else %}
+            Joint Director-Dashboard
+          {% endif %}
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav"></div>
+        <a href="/"><i class="fa fa-sign-out" style="font-size:36px;color:white"></i></a>
+    </nav>  
+    
+<h3 class="display-3 mt-1 ml-2">{{dept}} Dashboard</h3>
+<br>
+    <div class="row">
+        <div class="container">
+            <div class="row">
+              <div class="col">
+                <div class="btn card text-white bg-success" onclick="myFunction1()" style="max-width: 12rem; max-height: 12rem;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Total Tasks</h5>
+                        <h1 class="display-4 text-center">{{tt}}</h1>
+                    </div>
+                </div><br>
+            </div>
+                <div class="col">
+                    <div class="btn card text-white bg-info" onclick="myFunction2()" style="max-width: 12rem; max-height: 12rem;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">HOD</h5>
+                            <h1 class="display-4 text-center">{{hod}}</h1>
+                        </div>
+                    </div><br>
+                </div>
+                <div class="col">
+                    <div class="btn card text-white bg-warning" onclick="myFunction3()" style="max-width: 12rem; max-height: 12rem;">
+                        <div class="card-body">
+                          <h5 class="card-title text-center">Professor</h5>
+                          <h1 class="display-4 text-center">{{pt}}</h1>
+                        </div>
+                    </div><br>
+                </div>
+                <div class="col">
+                    <div class="btn card text-white bg-secondary" onclick="myFunction4()" style="max-width: 15rem; max-height: 12rem;">
+                        <div class="card-body">
+                          <h5 class="card-title ">Associate Prof.</h5>
+                          <h1 class="display-4 text-center">{{ap}}</h1>
+                        </div>
+                    </div><br>
+                </div>
+                <div class="col">
+                    <div class="btn card text-white bg-danger" onclick="myFunction5()" style="max-width: 15rem; max-height: 12rem;">
+                        <div class="card-body">
+                          <h5 class="card-title text-center">Assistant Prof.</h5>
+                          {% if assts%}
+                          <h1 class="display-4 text-center">{{assts}}</h1>
+                          {%else%}
+                          <h1 class="display-4 text-center">0</h1>
+                          {%endif%}
+                        </div>
+                    </div><br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    
+    <div id="myDIV1" class="md-auto" style="display: none;">
+        <div class="row mt-5 md-auto">
+            <div class="col md-auto">
+                <div class="container table-responsive">
+                    
+                    <table class="table table-hover" >
+                        <thead>
+                          <tr>
+                            <th scope="col">Task Name</th>                            
+                            <th scope="col">Assigned By</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Assigned To</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Assigned On</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Remarks</th>
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% if msg1 %}
+                                <li class="list-group-item list-group-item-danger text-center mb-3">{{ msg }}</li>
+                            {% endif %}
+                            {%if infos1!=None and msg1==None %}
+                            {% for i in infos1 %}
+                          <tr>
+                            <td> {{ i[1] }} </td>
+                            <td> {{ i[5] }} </td>
+                            <td> {{ i[6] }} </td>
+                            <td> {{ i[2] }} </td>
+                            <td> {{ i[3] }} </td>
+                            <td style="color: green;">{{ i[8] }}</td>
+                            <td style="color: red;">{{ i[9] }}</td>
+
+                            {% if i[10] == 'high' %}
+                                <td><span class="badge badge-pill badge-danger">{{ i[10] }}</span></td>
+                            {% endif %}
+                            {% if i[10] == 'medium' %}
+                                <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
+                            {% endif %}
+                            {% if i[10] == 'low' %}
+                                <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                            {% endif %}
+
+                            <td> {{ i[12] }} </td>
+                            
+                            <td>
+                              
+                                <form  action="/remarkview1" method="POST" >
+                                  <input type="hidden" name="id" value={{i[0]}}>
+                                  <input type="hidden" name="taskName" value="{{i[1]}}">
+                                  <input type="hidden" name="assignees" value="{{i[2]}}">
+                                  <input type="hidden" name="designation" value="{{i[3]}}">
+                                  <input type="hidden" name="assignedby" value="{{i[5]}}">
+                                  <input type="hidden" name="role" value="{{i[6]}}">
+                                  <input type="hidden" name="dept" value={{i[7]}}>
+                                  <input type="hidden" name="groupTask" value={{i[4]}}>
+                                  <input type="submit" value="View" class="btn btn-info btn-sm"></form>
+                              
+                            </td>
+                          </tr>
+
+                            {%endfor%}
+                            {% endif %}
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="myDIV2" style="display: none;">
+        <div class="row mt-5 md-auto">
+            <div class="col md-auto">
+                <div class="container table-responsive">
+                    <table class="table table-hover" >
+                        <thead>
+                          <tr>
+                            <th scope="col">Task Name</th>
+                            <th scope="col">Assigned By</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Assigned To</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Assigned On</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Remarks</th>                          
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% if msg2 %}
+                                <li class="list-group-item list-group-item-danger text-center mb-3">{{ msg2 }}</li>
+                            {% endif %}
+                            {%if infos2!=None and msg2==None %}
+                            {% for i in infos2 %}
+                            <tr>
+                              <td> {{ i[1] }} </td>
+                              <td> {{ i[5] }} </td>
+                              <td> {{ i[6] }} </td>
+                              <td> {{ i[2] }} </td>
+                              <td> {{ i[3] }} </td>
+                              <td style="color: green;">{{ i[8] }}</td>
+                              <td style="color: red;">{{ i[9] }}</td>
+  
+                              {% if i[10] == 'high' %}
+                                  <td><span class="badge badge-pill badge-danger">{{ i[10] }}</span></td>
+                              {% endif %}
+                              {% if i[10] == 'medium' %}
+                                  <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
+                              {% endif %}
+                              {% if i[10] == 'low' %}
+                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                              {% endif %}
+  
+                              <td> {{ i[12] }} </td>
+                              <td>
+                              
+                                <form  action="/remarkview1" method="POST" >
+                                  <input type="hidden" name="id" value={{i[0]}}>
+                                  <input type="hidden" name="taskName" value="{{i[1]}}">
+                                  <input type="hidden" name="assignees" value="{{i[2]}}">
+                                  <input type="hidden" name="designation" value="{{i[3]}}">
+                                  <input type="hidden" name="assignedby" value="{{i[5]}}">
+                                  <input type="hidden" name="role" value="{{i[6]}}">
+                                  <input type="hidden" name="dept" value={{i[7]}}>
+                                  <input type="hidden" name="groupTask" value={{i[4]}}>
+                                  <input type="submit" value="View" class="btn btn-info btn-sm"></form>
+                              
+                            </td>
+                            </tr>
+                            {%endfor%}
+                            {% endif %}
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div id="myDIV3" style="display: none;">
+        <div class="row mt-5">
+            <div class="col md-auto">
+                <div class="container md-auto table-responsive">
+                    <table class="table table-hover" >
+                        <thead>
+                          <tr>
+                            <th scope="col">Task Name</th>
+                            <th scope="col">Assigned By</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Assigned To</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Assigned On</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Remarks</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% if msg3 %}
+                                <li class="list-group-item list-group-item-danger text-center mb-3">{{ msg3 }}</li>
+                            {% endif %}
+                            
+                            {%if infos3!=None and msg3==None %}
+                            {% for i in infos3 %}
+                            <tr>
+                              <td> {{ i[1] }} </td>
+                              <td> {{ i[5] }} </td>
+                              <td> {{ i[6] }} </td>
+                              <td> {{ i[2] }} </td>
+                              <td> {{ i[3] }} </td>
+                              <td style="color: green;">{{ i[8] }}</td>
+                              <td style="color: red;">{{ i[9] }}</td>
+  
+                              {% if i[10] == 'high' %}
+                                  <td><span class="badge badge-pill badge-danger">{{ i[10] }}</span></td>
+                              {% endif %}
+                              {% if i[10] == 'medium' %}
+                                  <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
+                              {% endif %}
+                              {% if i[10] == 'low' %}
+                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                              {% endif %}
+  
+                              <td> {{ i[12] }} </td>
+                              <td>
+                              
+                                <form  action="/remarkview1" method="POST" >
+                                  <input type="hidden" name="id" value={{i[0]}}>
+                                  <input type="hidden" name="taskName" value="{{i[1]}}">
+                                  <input type="hidden" name="assignees" value="{{i[2]}}">
+                                  <input type="hidden" name="designation" value="{{i[3]}}">
+                                  <input type="hidden" name="assignedby" value="{{i[5]}}">
+                                  <input type="hidden" name="role" value="{{i[6]}}">
+                                  <input type="hidden" name="dept" value={{i[7]}}>
+                                  <input type="hidden" name="groupTask" value={{i[4]}}>
+                                  <input type="submit" value="View" class="btn btn-info btn-sm"></form>
+                              
+                            </td>
+                            </tr>
+                            {%endfor%}
+                            {% endif %}
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div id="myDIV4" style="display: none;">
+        <div class="row mt-5 md-auto">
+            <div class="col md-auto">
+                <div class="container table-responsive">
+                    
+                    <table class="table table-hover" >
+                        <thead>
+                          <tr>
+                            <th scope="col">Task Name</th>
+                            <th scope="col">Assigned By</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Assigned To</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Assigned On</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Remarks</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% if msg4 %}
+                                <li class="list-group-item list-group-item-danger text-center mb-3">{{ msg4 }}</li>
+                            {% endif %}
+                            {%if infos4!=None and msg4==None %}
+                            {% for i in infos4 %}
+                            <tr>
+                              <td> {{ i[1] }} </td>
+                              <td> {{ i[5] }} </td>
+                              <td> {{ i[6] }} </td>
+                              <td> {{ i[2] }} </td>
+                              <td> {{ i[3] }} </td>
+                              <td style="color: green;">{{ i[8] }}</td>
+                              <td style="color: red;">{{ i[9] }}</td>
+  
+                              {% if i[10] == 'high' %}
+                                  <td><span class="badge badge-pill badge-danger">{{ i[10] }}</span></td>
+                              {% endif %}
+                              {% if i[10] == 'medium' %}
+                                  <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
+                              {% endif %}
+                              {% if i[10] == 'low' %}
+                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                              {% endif %}
+  
+                              <td> {{ i[12] }} </td>
+                              <td>
+                              
+                                <form  action="/remarkview1" method="POST" >
+                                  <input type="hidden" name="id" value={{i[0]}}>
+                                  <input type="hidden" name="taskName" value="{{i[1]}}">
+                                  <input type="hidden" name="assignees" value="{{i[2]}}">
+                                  <input type="hidden" name="designation" value="{{i[3]}}">
+                                  <input type="hidden" name="assignedby" value="{{i[5]}}">
+                                  <input type="hidden" name="role" value="{{i[6]}}">
+                                  <input type="hidden" name="dept" value={{i[7]}}>
+                                  <input type="hidden" name="groupTask" value={{i[4]}}>
+                                  <input type="submit" value="View" class="btn btn-info btn-sm"></form>
+                              
+                            </td>
+                            </tr>
+                            {%endfor%}
+                            {% endif %}
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div id="myDIV5" style="display: none;">
+        <div class="row mt-5 md-auto">
+            <div class="col md-auto">
+                <div class="container table-responsive">
+                    
+                    <table class="table table-hover" >
+                        <thead>
+                          <tr>
+                            <th scope="col">Task Name</th>
+                            <th scope="col">Assigned By</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Assigned To</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Assigned On</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Remarks</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% if msg5 %}
+                                <li class="list-group-item list-group-item-danger text-center mb-3">{{ msg5 }}</li>
+                            {% endif %}
+                            {%if infos5!=None and msg5==None %}
+                            {% for i in infos5 %}
+                            <tr>
+                              <td> {{ i[1] }} </td>
+                              <td> {{ i[5] }} </td>
+                              <td> {{ i[6] }} </td>
+                              <td> {{ i[2] }} </td>
+                              <td> {{ i[3] }} </td>
+                              <td style="color: green;">{{ i[8] }}</td>
+                              <td style="color: red;">{{ i[9] }}</td>
+  
+                              {% if i[10] == 'high' %}
+                                  <td><span class="badge badge-pill badge-danger">{{ i[10] }}</span></td>
+                              {% endif %}
+                              {% if i[10] == 'medium' %}
+                                  <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
+                              {% endif %}
+                              {% if i[10] == 'low' %}
+                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                              {% endif %}
+  
+                              <td> {{ i[12] }} </td>
+                              <td>
+                              
+                                <form  action="/remarkview1" method="POST" >
+                                  <input type="hidden" name="id" value={{i[0]}}>
+                                  <input type="hidden" name="taskName" value="{{i[1]}}">
+                                  <input type="hidden" name="assignees" value="{{i[2]}}">
+                                  <input type="hidden" name="designation" value="{{i[3]}}">
+                                  <input type="hidden" name="assignedby" value="{{i[5]}}">
+                                  <input type="hidden" name="role" value="{{i[6]}}">
+                                  <input type="hidden" name="dept" value={{i[7]}}>
+                                  <input type="hidden" name="groupTask" value={{i[4]}}>
+                                  <input type="submit" value="View" class="btn btn-info btn-sm"></form>
+                              
+                            </td>
+                            </tr>
+                            {%endfor%}
+                            {% endif %}
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+      </div>
+
+
+    <div id="chartContainer" style="height: 350px; width: 75%; margin-left: 10%;">abc</div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        <script>
+    
+     function myFunction1() {  
+        var x = document.getElementById("myDIV1");
+    var ch = document.getElementById("chartContainer");
+    var y = document.getElementById("myDIV2");
+    var z = document.getElementById("myDIV3");
+    var u= document.getElementById("myDIV4");
+    var v = document.getElementById("myDIV5");
+  
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    ch.style.display='none';
+    y.style.display='none';
+    z.style.display='none';
+    u.style.display='none';
+    v.style.display='none';
+  } else {
+    x.style.display = "none";
+    ch.style.display='block';
+  }}
+  function myFunction2() { 
+    var x = document.getElementById("myDIV1");
+    var ch = document.getElementById("chartContainer");
+    var y = document.getElementById("myDIV2");
+    var z = document.getElementById("myDIV3");
+    var u= document.getElementById("myDIV4");
+    var v = document.getElementById("myDIV5"); 
+ 
+  if (y.style.display === "none") {
+    y.style.display = "block";
+    ch.style.display='none';
+    x.style.display='none';
+    z.style.display='none';
+    u.style.display='none';
+    v.style.display='none';
+  } else {
+    y.style.display = "none";
+    ch.style.display='block';
+  }}
+  function myFunction3() { 
+    var x = document.getElementById("myDIV1");
+    var ch = document.getElementById("chartContainer");
+    var y = document.getElementById("myDIV2");
+    var z = document.getElementById("myDIV3");
+    var u= document.getElementById("myDIV4");
+    var v = document.getElementById("myDIV5"); 
+ 
+  if (z.style.display === "none") {
+    z.style.display = "block";
+    ch.style.display='none';
+    y.style.display='none';
+    x.style.display='none';
+    u.style.display='none';
+    v.style.display='none';
+  } else {
+    z.style.display = "none";
+    ch.style.display='block';
+  }}
+  function myFunction4() {  
+    var x = document.getElementById("myDIV1");
+    var ch = document.getElementById("chartContainer");
+    var y = document.getElementById("myDIV2");
+    var z = document.getElementById("myDIV3");
+    var u= document.getElementById("myDIV4");
+    var v = document.getElementById("myDIV5");
+  
+  if (u.style.display === "none") {
+    u.style.display = "block";
+    ch.style.display='none';
+    y.style.display='none';
+    z.style.display='none';
+    x.style.display='none';
+    v.style.display='none';
+  } else {
+    u.style.display = "none";
+    ch.style.display='block';
+  }}
+  function myFunction5() { 
+    var x = document.getElementById("myDIV1");
+    var ch = document.getElementById("chartContainer");
+    var y = document.getElementById("myDIV2");
+    var z = document.getElementById("myDIV3");
+    var u= document.getElementById("myDIV4");
+    var v = document.getElementById("myDIV5"); 
+  
+  if (v.style.display === "none") {
+    v.style.display = "block";
+    ch.style.display='none';
+    y.style.display='none';
+    z.style.display='none';
+    u.style.display='none';
+    x.style.display='none';
+  } else {
+    v.style.display = "none";
+    ch.style.display='block';
+  }
+}
+</script>
+
+</body>
+</html>

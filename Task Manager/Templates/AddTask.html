@@ -12,95 +12,138 @@
             background: linear-gradient(-40deg,#006666,#00ccff);
             border-bottom: 1px solid white;
         }
+        .backBtn:hover{
+            text-decoration: none;
+            color: orangered;
+        }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light navbg">
         <img class="ml-4" height="30px" src="{{ url_for('static', filename='/images/p1.ico') }}" alt="logo"> &nbsp; <span style="color: azure;">Task Manager</span>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
     </nav>
 
-    <h1 class="display-3 ml-3 mb-4">Add Task</h1>
+    <!-- {% if 'Select' in msg1 %}
+        <script> function myfunc(){alert({{ msg1 }});} </script>
+    {% endif %} -->
 
+    <h1 class="display-3 ml-3 mb-4"><span><a href="{{ url_for('goBack') }}" class="backBtn">&lt; </a></span> Add Task</h1>
     <div class="container">
         <div class="row">
             <div class="col col-lg-6">
+                {% if msg and color=='success' %}
+                    <li class="list-group-item list-group-item-success">{{ msg }}</li>
+                {% elif msg and color=='danger' %}
+                    <li class="list-group-item list-group-item-danger">{{ msg }}</li>
+                {% endif %}
+                <br>
                 <div class="row">               
                     <div class="col col-lg-5">     
                         <form action="/getNames" method="POST">                    
-                            <label>Department</label><br>
+                            <label><b>Department</b></label><br>
                             <input type="Checkbox" value="cse" name="chck">
-                            <label for="cse">CSE</label>
+                            <label for="cse">CSE</label> &nbsp;
                             <input type="Checkbox" value="ise" name="chck">
-                            <label for="ise">ISE</label>
+                            <label for="ise">ISE</label>&nbsp;
                             <input type="Checkbox" value="ece" name="chck">
-                            <label for="ece">ECE</label><br>
-                            <input type="Checkbox" value="eee" name="chck">
-                            <label for="eee">EEE</label>
+                            <label for="ece">ECE</label>&nbsp;
+                            <input type="Checkbox" value="ei" name="chck">
+                            <label for="eee">EIE</label>&nbsp;</br>
                             <input type="Checkbox" value="iem" name="chck">
                             <label for="iem">IEM</label>
-                            <input type="Checkbox" value="me" name="chck">
-                            <label for="me">ME</label>
-                            <input type="Checkbox" value="cv" name="chck">
-                            <label for="cv">CE</label>
+                            <input type="Checkbox" value="mech" name="chck">
+                            <label for="me">ME</label>&nbsp;
+                            <input type="Checkbox" value="civ" name="chck">
+                            <label for="cv">CIV</label> &nbsp;
+                            <input type="Checkbox" value="bs" name="chck">
+                            <label for="bs">BSci</label></br>
+                            <input type="Checkbox" value="mba" name="chck">
+                            <label for="mba">MBA</label>
                         </div>
                         <div class="col col-lg-7">
-                            <label for="designation">Designation</label><br>
+                            <label for="designation"><b>Designation</b></label><br>
                             <div class="row">
                                 <div class="col col-lg-9">
-                                    {% if role == 'Principal' %}
+                                    {% if role == 'JD' %}
+                                        <input type="checkbox" value="Principal" name="chck2">
+                                        <label for="Principal">Principal</label><br>
+                                    {% endif %}
+                                    {% if role == 'Head' or role == 'Principal' or role == 'JD' %}
                                         <input type="checkbox" value="Head" name="chck2">
                                         <label for="Head">Head of Department</label><br>
-                                    {% endif %}
-                                    {% if role == 'Head' or role == 'Principal' %}
+                                        <input type="checkbox" value="Professor" name="chck2">
+                                        <label for="Professor">Professor</label><br>
                                         <input type="checkbox" value="Associate Professor" name="chck2">
                                         <label for="Associate Professor">Associate Professor</label><br>
                                         <input type="checkbox" value="Asst. Prof." name="chck2">
                                         <label for="Asst. Prof.">Asstistant Professor</label>
                                     {% endif %}
+                                    {% if role == 'Professor' %}
+                                        <input type="checkbox" value="Professor" name="chck2">
+                                        <label for="Professor">Professor</label><br>
+                                        <input type="checkbox" value="Associate Professor" name="chck2">
+                                        <label for="Associate Professor">Associate Professor</label><br>
+                                        <input type="checkbox" value="Asst. Prof." name="chck2">
+                                        <label for="Asst. Prof.">Asstistant Professor</label>
+                                    {% endif %} 
                                     {% if role == 'Associate Professor' %}
+                                         <input type="checkbox" value="Associate Professor" name="chck2">
+                                        <label for="Associate Professor">Associate Professor</label><br>
+                                        <input type="checkbox" value="Asst. Prof." name="chck2">
+                                        <label for="Asst. Prof.">Asstistant Professor</label>
+                                    {% endif %}  
+                                    {% if role == 'Asstistant Professor' %}
                                         <input type="checkbox" value="Asst. Prof." name="chck2">
                                         <label for="Asst. Prof.">Asstistant Professor</label>
                                     {% endif %}  
                                 </div>
                                 <div class="col col-lg-3 mt-3">
-                                    <button type="submit" class="btn btn-success">Go</button>
+                                    <button type="submit" class="btn btn-success btn-sm">Go</button>
                                 </div>
                             </div>                        
                         </div>
                     </form>
-                </div><br>
-
+                </div>
+<br>
                 <form action="/taskAssign" method="POST">
-                    <label for="taskName">Task Name</label>
-                    <input class="form-control" type="text" name="taskName" placeholder="Add here.."> <br>
-
                     <div class="row">
-                        <div class="col col-lg-6">
-                            <label for="designation">Assigned By</label>
-                            <input class="form-control" name="assignedby" value={{ name }}>
+                        <div class="col col-lg-8">
+                            <label for="taskName"><b>Task Name</b></label>
+                            <input required class="form-control" type="text" name="taskName" placeholder="Add here.."> <br>
                         </div>
-                        <div class="col col-lg-6">
-                            <label for="assignees">Role</label>
-                            <input class="form-control" name="role" value={{ role }}><br>
+                        <div class="col">
+                            <label><b>Task Type</b></label><br>
+                            <input required type="radio" value="no" name="taskType">
+                            <label for="individual">Individual</label> &nbsp;<br>
+                            <input required type="radio" value="yes" name="taskType">
+                            <label for="group">Group</label> &nbsp;
                         </div>
                     </div>
-                    
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <label for="designation"><b>Assigned By</b></label>
+                            <input required class="form-control" name="assignedby" value="{{ name }}">
+                        </div>
+                        <div class="col">
+                            <label for="assignees"><b>Role</b></label>
+                            <input required  class="form-control" name="role" value="{{ role }}"><br>
+                        </div>
+                    </div>
+                    <br>
                     <div class="row">
                         <div class="col col-lg-4">
-                            <label for="datein">Assigned Date</label>
-                            <input class="form-control" name="datein" type="date">
+                            <label for="datein"><b>Assigned Date</b></label>
+                            <input required class="form-control" name="datein" type="date">
                         </div>
                         <div class="col col-lg-4">
-                            <label for="dateout">Due Date</label><br>
-                            <input class="form-control" name="dateout" type="date">
+                            <label for="dateout"><b>Due Date</b></label><br>
+                            <input required class="form-control" name="dateout" type="date">
                         </div>
                         <div class="col col-lg-4">
-                            <label for="priority">Priority</label>
-                            <select class="custom-select" name="priority">
+                            <label for="priority"><b>Priority</b></label>
+                            <select required class="custom-select" name="priority">
                                 <option selected>Choose..</option><hr>
                                 <option value="high" class="badge-danger">High</option><hr>
                                 <option value="medium" class="badge-warning">Medium</option><hr>
@@ -109,25 +152,29 @@
                         </div>
                     </div><br>
                     
-                    <textarea name="comment" placeholder="Comments..." cols="72" rows="3"></textarea>
+                    <textarea class="col-sm-12" name="comment" placeholder="Comments..." cols="72" rows="3"></textarea>
+
                     <div>
                         <button type="submit" class="btn btn-success">Add Task</button>
-                    </div>
+                    </div><br>
                 </div>
                 <div class="col" style="height: 67vh; overflow-y: scroll;">
-                    <label for="assignees">Assignees</label> <p class="float-right">Total : {{ count }}</p><br>
+                    <label for="assignees" class="text-center"><b>Assignees </b><br>
+                    <span style="color: red;">(Select Department, Designation and press 'Go')</span></label> 
+                    <!-- <p class="float-right">Total : {{ count }}</p> -->
+                    <br>
                     {% for i in infos %}
-                        <li class="list-group-item list-group-item-secondary">
-                            {{ i[0] }}
-                            <input type="Checkbox" class="float-right" value={{ i[0] }} name="chck3">
-                        </li>
+                        {% for j in i %}
+                            <li class="list-group-item list-group-item-secondary">
+                                {{ j[0] }} &nbsp;  ({{ j[1].upper() }})
+                                <input type="Checkbox" class="float-right" value="{{ j[0] }}" name="chck3">
+                            </li>
+                        {% endfor %}
                     {% endfor %}
                 </div>
             </form>
         </div>
     </div>
-    
-
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

@@ -44,6 +44,8 @@
         .highcharts-data-table tr:hover {
         background: #f1f7ff;
         }
+
+
     </style>
 </head>
 <body>
@@ -52,42 +54,53 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-    <h1 class="display-3 ml-5">{{ name }} track your works here...</h1><br>
+    <h1 class="display-3 ml-2">{{ name }} track your work here...</h1><br>
 
     <div class="row">
         <div class="container">
             <div class="row">
                 <div class="col">
+                     <div class="mt-2 ml-1">
                     <div class="card text-white bg-info" style="max-width: 15rem; max-height: 12rem;">
+                       
+                        
                         <div class="card-body">
                             <h5 class="card-title text-center">Assigned Task</h5>
                             <h1 class="display-1 text-center">{{ at }}</h1>
+                   
                         </div>
+                    </div>
                     </div>
                 </div>
                 <div class="col">
+                     <div class="mt-2 ml-1">
                     <div class="card text-white bg-dark" style="max-width: 15rem; max-height: 12rem;">
                         <div class="card-body">
                           <h5 class="card-title text-center">Task By Me</h5>
                           <h1 class="display-1 text-center">{{ tbm }}</h1>
                         </div>
                     </div>
+                    </div>
                 </div>
                 <div class="col">
+                     <div class="mt-2 ml-1">
                     <div class="card text-white bg-success" style="max-width: 15rem; max-height: 12rem;">
                         <div class="card-body">
                           <h5 class="card-title text-center">Completed Task</h5>
                           <h1 class="display-1 text-center">{{ cmp }}</h1>
                         </div>
                     </div>
+                    </div>
                 </div>
                 <div class="col">
+                     <div class="mt-2 ml-1">
                     <div class="card text-white bg-warning" style="max-width: 15rem; max-height: 12rem;">
                         <div class="card-body">
                           <h5 class="card-title text-center">In Progress</h5>
                           <h1 class="display-1 text-center">{{ prg }}</h1>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
