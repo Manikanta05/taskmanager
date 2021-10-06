@@ -7,12 +7,12 @@
     <title>Dashboard</title>
     <link rel="icon" href="{{ url_for('static', filename='/images/p2.ico') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style> 
+    <style>
         body{
             overflow-x: hidden;
-        } 
+        }
         .highcharts-figure, .highcharts-data-table table {
-        min-width: 320px; 
+        min-width: 320px;
         max-width: 660px;
         margin: 1em auto;
         }
@@ -44,8 +44,13 @@
         .highcharts-data-table tr:hover {
         background: #f1f7ff;
         }
-
-
+        .backBtn:hover{
+            text-decoration: none;
+            color: orangered;
+        }
+        .highcharts-credits{
+            display:none;
+        }
     </style>
 </head>
 <body>
@@ -53,8 +58,10 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-    <h1 class="display-3 ml-2">{{ name }} track your work here...</h1><br>
+    <h1 class="display-4 ml-2"><span><a href="{{ url_for('goBack') }}" class="backBtn"><ion-icon name="caret-back"></ion-icon> </a></span> {{ name }} track your work here..</h1><br>
 
     <div class="row">
         <div class="container">
@@ -62,12 +69,9 @@
                 <div class="col">
                      <div class="mt-2 ml-1">
                     <div class="card text-white bg-info" style="max-width: 15rem; max-height: 12rem;">
-                       
-                        
                         <div class="card-body">
                             <h5 class="card-title text-center">Assigned Task</h5>
                             <h1 class="display-1 text-center">{{ at }}</h1>
-                   
                         </div>
                     </div>
                     </div>
@@ -109,7 +113,7 @@
     <figure class="highcharts-figure mt-1">
         <div id="container"></div>
     </figure>
-    
+
     <script>
         // Radialize the colors
         Highcharts.setOptions({
@@ -169,6 +173,6 @@
         }]
         });
     </script>
-    
+
     </body>
 </html>

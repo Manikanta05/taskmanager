@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principal Portal</title>
+    <title>Staff Portal</title>
     <link rel="icon" href="{{ url_for('static', filename='/images/logo.ico') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -36,6 +36,22 @@
         .mutedTxt{
             font-size: 2.5em;
             font-weight: 300;
+        }
+        @media (max-width:400px) {
+            body{
+                max-width: 100vw;
+                overflow-x: hidden;
+            }
+            #sidebar{
+                max-width: 103.5vw;
+                max-height: 80vh;
+            }
+            #h1{
+                font-size: 48px;
+            }
+            #h2p{
+                font-size: 38px;
+            }
         }
         #loader {
           position: absolute;
@@ -69,44 +85,30 @@
 <div id="myDiv" >
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light navbg">
-        <img class="ml-4" height="30px" src="{{ url_for('static', filename='/images/p1.ico') }}" alt="logo"> &nbsp; <span style="color: aliceblue;">Task Manager / Prinicpal</span>
+        <img class="ml-4" height="30px" src="{{ url_for('static', filename='/images/p1.ico') }}" alt="logo"> &nbsp;<span style="color: aliceblue;">Task Manager / Non Teaching Staff</span>
         <div class="collapse navbar-collapse" id="navbarNav"></div>
-        <i class="fa fa-sign-out" data-toggle="modal" data-target="#exampleModalCenter" style="font-size:36px;color:white;cursor: pointer;"></i>
+        <i data-toggle="modal" data-target="#exampleModalCenter" class="fa fa-sign-out" style="font-size:36px;color:white; cursor: pointer;"></i>
     </nav>
 
     <div class="row">
-        <div class="col col-lg-2 col-md-2 col-sm-4 sidebar">
+        <div id="sidebar" class="col col-lg-2 col-md-2 col-sm-4 sidebar">
             <h1 class="text-center mt-5">TASK MANAGER</h1> <br><br>
             <div class="col sidebarA">
                 <a href="/dashboard" class="nav-link"><ion-icon class="mr-2" name="pie-chart-sharp"></ion-icon>Dashboard</a><br>
                 <a href="/assignedTask" class="nav-link"><ion-icon class="mr-2" name="download"></ion-icon>Assigned Task</a><br>
                 <a href="/taskByme" class="nav-link"><ion-icon class="mr-2" name="arrow-redo-circle"></ion-icon>Individual Task</a><br>
                 <a href="/taskBymeGroup" class="nav-link"><ion-icon class="mr-2" name="arrow-redo-circle"></ion-icon>Group Task</a><br>
-                <a href="/dashboard" class="nav-link" data-toggle="dropdown"><ion-icon class="mr-2" name="pie-chart-sharp"></ion-icon>Dept. Dashboard</a><br>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="CSE"><input type="submit" value="CSE" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="CIV"><input type="submit" value="CIV" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="ISE"><input type="submit" value="ISE" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="EC"><input type="submit" value="ECE" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="EI"><input type="submit" value="EIE" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="MECH"><input type="submit" value="ME" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="IEM"><input type="submit" value="IEM" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="PHY"><input type="submit" value="PHY" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="CHEM"><input type="submit" value="CHEM" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="MAT"><input type="submit" value="MAT" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                    <form  action="/pdash" method="POST" ><input type="hidden" name="dept" value="MBA"><input type="submit" value="MBA" class="ml-3 "style="padding: match-parent;border: none;background: none; cursor: pointer;"></form>
-                </div>
                 <a href="/helpPage" class="nav-link"><ion-icon class="mr-2" name="help-circle"></ion-icon>Help</a><br>
                 <a href="/contactPage" class="nav-link"><ion-icon class="mr-2" name="call"></ion-icon> Contact</a><br>
             </div>
         </div>
         <div class="container col-sm-8">
             <div class="col">
-                <h1 class="display-3 mt-5">Welcome Mrityunjaya V Latte</h1><br>
-                <h2 class="text-muted mutedTxt">Start controlling your Projects and Teams</h2><br>
-                <a href="/addTaskPage" class="btn btn-info btn-lg">Add Task</a>
-            </div><br>
-        </div><br>
+                <h1 id="h1" class="display-3 mt-5">Welcome {{ name }}</h1><br>
+                <h2 id="h2p" class="text-muted mutedTxt">Start controlling your Projects and Teams</h2><br>
+                <a href="/addTaskPage" class="btn btn-info btn-lg">Add Task </a><br>
+            </div><br><br>
+        </div>
     </div>
 </div>
     <!-- Logout Modal -->

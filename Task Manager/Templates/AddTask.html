@@ -7,7 +7,7 @@
     <title>Add Task</title>
     <link rel="icon" href="{{ url_for('static', filename='/images/p3.ico') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style>  
+    <style>
         .navbg{
             background: linear-gradient(-40deg,#006666,#00ccff);
             border-bottom: 1px solid white;
@@ -16,96 +16,226 @@
             text-decoration: none;
             color: orangered;
         }
+        #deptCheckbox{
+            height: 30vh;
+            overflow-y: scroll;
+        }
+        .form-check-input{
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light navbg">
-        <img class="ml-4" height="30px" src="{{ url_for('static', filename='/images/p1.ico') }}" alt="logo"> &nbsp; <span style="color: azure;">Task Manager</span>
+        <img class="ml-4" height="30px" src="{{ url_for('static', filename='/images/p1.ico') }}" alt="logo"> &nbsp; <span style="color: azure;">Task Manager / Assign Task</span>
     </nav>
 
-    <!-- {% if 'Select' in msg1 %}
-        <script> function myfunc(){alert({{ msg1 }});} </script>
-    {% endif %} -->
-
-    <h1 class="display-3 ml-3 mb-4"><span><a href="{{ url_for('goBack') }}" class="backBtn">&lt; </a></span> Add Task</h1>
+    <h1 class="display-4 ml-3 mb-4"><span><a href="{{ url_for('goBack') }}" class="backBtn"><ion-icon name="caret-back"></ion-icon> </a></span> Add Task</h1>
     <div class="container">
         <div class="row">
-            <div class="col col-lg-6">
+            <div class="col col-12 col-lg-6">
                 {% if msg and color=='success' %}
                     <li class="list-group-item list-group-item-success">{{ msg }}</li>
                 {% elif msg and color=='danger' %}
                     <li class="list-group-item list-group-item-danger">{{ msg }}</li>
                 {% endif %}
                 <br>
-                <div class="row">               
-                    <div class="col col-lg-5">     
-                        <form action="/getNames" method="POST">                    
+                <div class="row">
+                    <div class="col col-lg-5">
+                         <form action="/getNames" method="POST">
                             <label><b>Department</b></label><br>
                             <input type="Checkbox" value="cse" name="chck">
-                            <label for="cse">CSE</label> &nbsp;
+                            <label for="cse">CSE</label> &nbsp;</br>
                             <input type="Checkbox" value="ise" name="chck">
-                            <label for="ise">ISE</label>&nbsp;
+                            <label for="ise">ISE</label>&nbsp;</br>
                             <input type="Checkbox" value="ece" name="chck">
-                            <label for="ece">ECE</label>&nbsp;
+                            <label for="ece">ECE</label>&nbsp;</br>
                             <input type="Checkbox" value="ei" name="chck">
                             <label for="eee">EIE</label>&nbsp;</br>
                             <input type="Checkbox" value="iem" name="chck">
-                            <label for="iem">IEM</label>
+                            <label for="iem">IEM</label>&nbsp;</br>
                             <input type="Checkbox" value="mech" name="chck">
-                            <label for="me">ME</label>&nbsp;
+                            <label for="me">ME</label>&nbsp;</br>
                             <input type="Checkbox" value="civ" name="chck">
-                            <label for="cv">CIV</label> &nbsp;
-                            <input type="Checkbox" value="bs" name="chck">
-                            <label for="bs">BSci</label></br>
+                            <label for="cv">CIV</label> &nbsp;</br>
+                            <input type="Checkbox" value="mat" name="chck">
+                            <label for="bs">MAT</label>&nbsp;</br>
+                            <input type="Checkbox" value="chem" name="chck">
+                            <label for="bs">CHEM</label>&nbsp;</br>
+                            <input type="Checkbox" value="phy" name="chck">
+                            <label for="bs">PHY</label>&nbsp;</br>
                             <input type="Checkbox" value="mba" name="chck">
-                            <label for="mba">MBA</label>
+                            <label for="mba">MBA</label>&nbsp;</br>
                         </div>
-                        <div class="col col-lg-7">
+
+                    <div class="col col-lg-7">
                             <label for="designation"><b>Designation</b></label><br>
                             <div class="row">
                                 <div class="col col-lg-9">
                                     {% if role == 'JD' %}
-                                        <input type="checkbox" value="Principal" name="chck2">
+                                        <input class="form-check-input" type="checkbox" value="Principal" name="chck2">
                                         <label for="Principal">Principal</label><br>
                                     {% endif %}
                                     {% if role == 'Head' or role == 'Principal' or role == 'JD' %}
-                                        <input type="checkbox" value="Head" name="chck2">
+                                        <input class="form-check-input" type="checkbox" value="Head" name="chck2">
                                         <label for="Head">Head of Department</label><br>
-                                        <input type="checkbox" value="Professor" name="chck2">
+                                        <input class="form-check-input" type="checkbox" value="Professor" name="chck2">
                                         <label for="Professor">Professor</label><br>
-                                        <input type="checkbox" value="Associate Professor" name="chck2">
+                                        <input class="form-check-input" type="checkbox" value="Associate Professor" name="chck2">
                                         <label for="Associate Professor">Associate Professor</label><br>
-                                        <input type="checkbox" value="Asst. Prof." name="chck2">
-                                        <label for="Asst. Prof.">Asstistant Professor</label>
+                                        <input class="form-check-input" type="checkbox" value="Asst. Prof." name="chck2">
+                                        <label for="Asst. Prof.">Assistant Professor</label><br>
+                                        <input class="form-check-input" type="checkbox" value="System Analyst" name="chck2">
+                                        <label for="System Analyst">System Analyst</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Foreman" name="chck2">
+                                        <label for="Foreman">Foreman</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Programmer" name="chck2">
+                                        <label for="Programmer">Programmer</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Instructor" name="chck2">
+                                        <label for="Instructor">Instructor</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Lab Helper" name="chck2">
+                                        <label for="Lab Helper">Lab Helper</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Attender" name="chck2">
+                                        <label for="Attender">Attender</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Helper" name="chck2">
+                                        <label for="Helper">Helper</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Lab Instructor" name="chck2">
+                                        <label for="Lab Instructor">Lab Instructor</label>
+
                                     {% endif %}
                                     {% if role == 'Professor' %}
-                                        <input type="checkbox" value="Professor" name="chck2">
+                                        <input class="form-check-input" type="checkbox" value="Professor" name="chck2">
                                         <label for="Professor">Professor</label><br>
-                                        <input type="checkbox" value="Associate Professor" name="chck2">
+                                        <input class="form-check-input" type="checkbox" value="Associate Professor" name="chck2">
                                         <label for="Associate Professor">Associate Professor</label><br>
-                                        <input type="checkbox" value="Asst. Prof." name="chck2">
-                                        <label for="Asst. Prof.">Asstistant Professor</label>
-                                    {% endif %} 
+                                        <input class="form-check-input" type="checkbox" value="Asst. Prof." name="chck2">
+                                        <label for="Asst. Prof.">Assistant Professor</label><br>
+                                        <input class="form-check-input" type="checkbox" value="System Analyst" name="chck2">
+                                        <label for="System Analyst">System Analyst</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Foreman" name="chck2">
+                                        <label for="Foreman">Foreman</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Programmer" name="chck2">
+                                        <label for="Programmer">Programmer</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Instructor" name="chck2">
+                                        <label for="Instructor">Instructor</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Lab Helper" name="chck2">
+                                        <label for="Lab Helper">Lab Helper</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Attender" name="chck2">
+                                        <label for="Attender">Attender</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Helper" name="chck2">
+                                        <label for="Helper">Helper</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Lab Instructor" name="chck2">
+                                        <label for="Lab Instructor">Lab Instructor</label>
+                                    {% endif %}
                                     {% if role == 'Associate Professor' %}
-                                         <input type="checkbox" value="Associate Professor" name="chck2">
+                                         <input class="form-check-input" type="checkbox" value="Associate Professor" name="chck2">
                                         <label for="Associate Professor">Associate Professor</label><br>
-                                        <input type="checkbox" value="Asst. Prof." name="chck2">
-                                        <label for="Asst. Prof.">Asstistant Professor</label>
-                                    {% endif %}  
-                                    {% if role == 'Asstistant Professor' %}
-                                        <input type="checkbox" value="Asst. Prof." name="chck2">
-                                        <label for="Asst. Prof.">Asstistant Professor</label>
-                                    {% endif %}  
+                                        <input class="form-check-input"type="checkbox" value="Asst. Prof." name="chck2">
+                                        <label for="Asst. Prof.">Assistant Professor</label><br>
+                                        <input class="form-check-input" type="checkbox" value="System Analyst" name="chck2">
+                                        <label for="System Analyst">System Analyst</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Foreman" name="chck2">
+                                        <label for="Foreman">Foreman</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Programmer" name="chck2">
+                                        <label for="Programmer">Programmer</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Instructor" name="chck2">
+                                        <label for="Instructor">Instructor</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Lab Helper" name="chck2">
+                                        <label for="Lab Helper">Lab Helper</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Attender" name="chck2">
+                                        <label for="Attender">Attender</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Helper" name="chck2">
+                                        <label for="Helper">Helper</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Lab Instructor" name="chck2">
+                                        <label for="Lab Instructor">Lab Instructor</label>
+                                    {% endif %}
+                                    {% if role == 'Asst. Prof.' %}
+                                        <input class="form-check-input" type="checkbox" value="Asst. Prof." name="chck2">
+                                        <label for="Asst. Prof.">Assistant Professor</label><br>
+                                        <input class="form-check-input" type="checkbox" value="System Analyst" name="chck2">
+                                        <label for="System Analyst">System Analyst</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Foreman" name="chck2">
+                                        <label for="Foreman">Foreman</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Programmer" name="chck2">
+                                        <label for="Programmer">Programmer</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Instructor" name="chck2">
+                                        <label for="Instructor">Instructor</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Lab Helper" name="chck2">
+                                        <label for="Lab Helper">Lab Helper</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Attender" name="chck2">
+                                        <label for="Attender">Attender</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Helper" name="chck2">
+                                        <label for="Helper">Helper</label><br>
+
+                                        <input class="form-check-input" type="checkbox" value="Lab Instructor" name="chck2">
+                                        <label for="Lab Instructor">Lab Instructor</label>
+                                    {% endif %}
+                                    {% if role == 'System Analyst' or role =='Foreman' %}
+
+                                        <input class="form-check-input" type="checkbox" value="Foreman" name="chck2">
+                                        <label for="Foreman">Foreman</label><br>
+                                    {% endif %}
+                                    {% if role == 'System Analyst' or role =='Foreman' or role =='Programmer' %}
+                                        <input class="form-check-input" type="checkbox" value="Programmer" name="chck2">
+                                        <label for="Programmer">Programmer</label><br>
+                                    {% endif %}
+                                    {% if role == 'System Analyst' or role =='Foreman' or role =='Programmer'or role =='Instructor' %}
+                                        <input class="form-check-input" type="checkbox" value="Instructor" name="chck2">
+                                        <label for="Instructor">Instructor</label><br>
+                                    {% endif %}
+                                    {% if role == 'System Analyst' or role =='Foreman' or role =='Programmer' or role =='Instructor' or role =='Lab Helper' %}
+                                        <input class="form-check-input" type="checkbox" value="Lab Helper" name="chck2">
+                                        <label for="Lab Helper">Lab Helper</label><br>
+                                    {% endif %}
+                                    {% if role == 'System Analyst' or role =='Foreman' or role =='Programmer' or role =='Instructor' or role =='Lab Helper'or role =='Attender' %}
+                                        <input class="form-check-input" type="checkbox" value="Attender" name="chck2">
+                                        <label for="Attender">Attender</label><br>
+                                    {% endif %}
+                                    {% if role == 'System Analyst' or role =='Foreman'or role =='Programmer'  or role =='Instructor' or role =='Lab Helper' or role =='Attender' or role =='Helper'%}
+                                        <input class="form-check-input" type="checkbox" value="Helper" name="chck2">
+                                        <label for="Helper">Helper</label><br>
+                                    {% endif %}
+                                    {% if role == 'System Analyst' or role =='Foreman'or role =='Programmer' or role =='Instructor' or role =='Lab Helper' or role =='Attender' or role =='Helper'or role =='Lab Instructor'  %}
+                                        <input class="form-check-input" type="checkbox" value="Lab Instructor" name="chck2">
+                                        <label for="Lab Instructor">Lab Instructor</label>
+                                    {% endif %}
                                 </div>
                                 <div class="col col-lg-3 mt-3">
                                     <button type="submit" class="btn btn-success btn-sm">Go</button>
                                 </div>
-                            </div>                        
+                            </div>
                         </div>
                     </form>
                 </div>
-<br>
+<br><br>
                 <form action="/taskAssign" method="POST">
                     <div class="row">
                         <div class="col col-lg-8">
@@ -151,7 +281,7 @@
                             </select>
                         </div>
                     </div><br>
-                    
+
                     <textarea class="col-sm-12" name="comment" placeholder="Comments..." cols="72" rows="3"></textarea>
 
                     <div>
@@ -159,8 +289,8 @@
                     </div><br>
                 </div>
                 <div class="col" style="height: 67vh; overflow-y: scroll;">
-                    <label for="assignees" class="text-center"><b>Assignees </b><br>
-                    <span style="color: red;">(Select Department, Designation and press 'Go')</span></label> 
+                    <label for="assignees"><b>Assignees </b><br>
+                    <span style="color: red;">(Select Department, Designation and press 'Go')</span></label>
                     <!-- <p class="float-right">Total : {{ count }}</p> -->
                     <br>
                     {% for i in infos %}
@@ -175,6 +305,9 @@
             </form>
         </div>
     </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

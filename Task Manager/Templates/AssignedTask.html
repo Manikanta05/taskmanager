@@ -8,6 +8,10 @@
     <link rel="icon" href="{{ url_for('static', filename='/images/p3.ico') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
+       .navbg{
+        background: linear-gradient(-40deg,#006666,#00ccff);
+        border-bottom: 1px solid white;
+      }
       .backBtn:hover{
         text-decoration: none;
         color: orangered;
@@ -16,18 +20,15 @@
 </head>
 <body style="overflow-x: hidden;">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Task Manager/Assigned Task</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-lg navbar-light navbg">
+      <img class="ml-4" height="30px" src="{{ url_for('static', filename='/images/p1.ico') }}" alt="logo"> &nbsp; <span style="color: aliceblue;">Task Manager / Assigned Task</span>
     </nav>
 
     <!-- Table -->
     <div class="row mt-3">
         <div class="col col-lg-12">
             <div class="table-responsive">
-                <h1 class="display-4 mb-5 ml-3"><span><a href="{{ url_for('goBack') }}" class="backBtn">&lt; </a></span>{{ name }}'s Tasks... </h1>
+                <h1 class="display-4 mb-5 ml-3"><span><a href="{{ url_for('goBack') }}" class="backBtn"><ion-icon name="caret-back"></ion-icon> </a></span>{{ name }}'s Tasks... </h1>
                 <table class="table table-hover">
                     <thead>
                       <tr>
@@ -41,6 +42,7 @@
                         <th scope="col">Comments</th>
                         <th scope="col">Status</th>
                         <th scope="col">Turn in</th>
+                        <th scope="col"></th>
                         <th scope="col">Remark</th>
                       </tr>
                     </thead>
@@ -48,6 +50,7 @@
                         {% if msg %}
                             <li class="list-group-item list-group-item-danger text-center mb-3">{{ msg }}</li>
                         {% endif %}
+
                         {% for i in infos %}
                       <tr>
                         <td> {{ i[1] }} </td>
@@ -67,45 +70,46 @@
                         {% endif %}
 
                         <td>{{ i[11] }}</td>
-
-                        {% if i[12] == 'Assigned' %}
                         <form action="/changeStatus" method="POST">
+                        {% if i[12] == 'Assigned' %}
+
                           <td>
                             <select name="currentStatus">
                               <option selected disabled>{{ i[12] }}</option>
                               <option value="In Progress">In Progress</option>
                               <option value="Completed">Completed</option>
                             </select>
-                            <input type="hidden" name="assignedBy" value="{{i[5]}}">
+                            <input type="hidden" name="taskName" value="{{i[1]}}">
                           </td>
                         {% elif i[12] == 'Completed' %}
                           <td><span class="badge badge-pill badge-success">{{ i[12] }}</span></td>
                         {% else %}
-                          <form action="/changeStatus" method="POST">
+
                             <td>
                               <select name="currentStatus">
                                 <option selected disabled>{{ i[12] }}</option>
                                 <option value="Completed">Completed</option>
                               </select>
-                              <input type="hidden" name="assignedBy" value="{{i[5]}}">
+                               <input type="hidden" name="taskName" value="{{i[1]}}">
                             </td>
                         {% endif %}
-                        
+
                         <td>
                           {% if i[13] %}
                             <input type="date" name="turnin" value={{ i[13] }}>
                           {% else %}
                             <input type="date" name="turnin">{{ i[13] }}
                           {% endif %}
-
+                        </td>
+                        <td>
                           {% if i[12] != 'Completed' %}
                             <input type="submit" class="ml-3 btn btn-success btn-sm" value='Go'>
-                          {% endif %}  
+                          {% endif %}
                         </td>
                       </form>
                       <td>
                         <form  action="/remarkview" method="POST" >
-                          <input type="hidden" name="id" value={{i[0]}}>
+                          <input type="hidden" name="id" value="{{i[0]}}">
                           <input type="hidden" name="taskName" value="{{i[1]}}">
                           <input type="hidden" name="assignees" value="{{i[2]}}">
                           <input type="hidden" name="designation" value="{{i[3]}}">
@@ -123,7 +127,8 @@
         </div>
     </div>
 
-
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

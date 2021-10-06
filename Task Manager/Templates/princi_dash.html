@@ -14,6 +14,8 @@
     <link rel="icon" href="{{ url_for('static', filename='/images/p2.ico') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <style>
         body{
             overflow-x: hidden;
@@ -43,9 +45,16 @@
             font-size: 2.5em;
             font-weight: 300;
         }
+        .backBtn:hover{
+            text-decoration: none;
+            color: orangered;
+        }
+        .canvasjs-chart-credit{
+            display: none;
+        }
     </style>
     <script>
-       
+
         window.onload = function () {
           CanvasJS.addColorSet("greenShades",
                 [//colorSet Array
@@ -53,9 +62,9 @@
                 "#003329",
                 "#008066",
                 "#00e6b8",
-                "#80ffe5"               
+                "#80ffe5"
                 ]);
-                    
+
         var chart = new CanvasJS.Chart("chartContainer", {
             animationEnabled: true,
             theme: "light2", // "light1", "light2", "dark1", "dark2"
@@ -63,11 +72,11 @@
             title:{
                 text: "Count"
             },
-            data: [{        
-                type: "column",  
-                showInLegend: true, 
+            data: [{
+                type: "column",
+                showInLegend: true,
 
-                dataPoints: [      
+                dataPoints: [
                     { y: {{asnt}}, label: "Assigned Task" },
                     { y: {{inpt}},  label: "In Progress" },
                     { y: {{ct}},  label: "Completed Task" },
@@ -76,9 +85,9 @@
             }]
         });
         chart.render();
-        
+
         }
-   
+
 
         </script>
 </head>
@@ -93,10 +102,9 @@
           {% endif %}
         </a>
         <div class="collapse navbar-collapse" id="navbarNav"></div>
-        <a href="/"><i class="fa fa-sign-out" style="font-size:36px;color:white"></i></a>
-    </nav>  
-    
-<h3 class="display-3 mt-1 ml-2">{{dept}} Dashboard</h3>
+    </nav>
+
+<h3 class="display-4 mt-1 ml-2"><span><a href="{{ url_for('goBack') }}" class="backBtn"><ion-icon name="caret-back"></ion-icon></a></span> {{dept}} Dashboard</h3>
 <br>
     <div class="row">
         <div class="container">
@@ -149,16 +157,16 @@
         </div>
     </div>
     <br>
-    
+
     <div id="myDIV1" class="md-auto" style="display: none;">
         <div class="row mt-5 md-auto">
             <div class="col md-auto">
                 <div class="container table-responsive">
-                    
+
                     <table class="table table-hover" >
                         <thead>
                           <tr>
-                            <th scope="col">Task Name</th>                            
+                            <th scope="col">Task Name</th>
                             <th scope="col">Assigned By</th>
                             <th scope="col">Role</th>
                             <th scope="col">Assigned To</th>
@@ -193,13 +201,13 @@
                                 <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
                             {% endif %}
                             {% if i[10] == 'low' %}
-                                <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                                <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td>
                             {% endif %}
 
-                            <td> {{ i[12] }} </td>
-                            
+                            <td> <span class="badge badge-pill badge-dark">{{ i[12] }}</span> </td>
+
                             <td>
-                              
+
                                 <form  action="/remarkview1" method="POST" >
                                   <input type="hidden" name="id" value={{i[0]}}>
                                   <input type="hidden" name="taskName" value="{{i[1]}}">
@@ -210,7 +218,7 @@
                                   <input type="hidden" name="dept" value={{i[7]}}>
                                   <input type="hidden" name="groupTask" value={{i[4]}}>
                                   <input type="submit" value="View" class="btn btn-info btn-sm"></form>
-                              
+
                             </td>
                           </tr>
 
@@ -239,7 +247,7 @@
                             <th scope="col">Due Date</th>
                             <th scope="col">Priority</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Remarks</th>                          
+                            <th scope="col">Remarks</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -256,7 +264,7 @@
                               <td> {{ i[3] }} </td>
                               <td style="color: green;">{{ i[8] }}</td>
                               <td style="color: red;">{{ i[9] }}</td>
-  
+
                               {% if i[10] == 'high' %}
                                   <td><span class="badge badge-pill badge-danger">{{ i[10] }}</span></td>
                               {% endif %}
@@ -264,12 +272,12 @@
                                   <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
                               {% endif %}
                               {% if i[10] == 'low' %}
-                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td>
                               {% endif %}
-  
-                              <td> {{ i[12] }} </td>
+
+                              <td> <span class="badge badge-pill badge-dark">{{ i[12] }}</span> </td>
+
                               <td>
-                              
                                 <form  action="/remarkview1" method="POST" >
                                   <input type="hidden" name="id" value={{i[0]}}>
                                   <input type="hidden" name="taskName" value="{{i[1]}}">
@@ -279,8 +287,8 @@
                                   <input type="hidden" name="role" value="{{i[6]}}">
                                   <input type="hidden" name="dept" value={{i[7]}}>
                                   <input type="hidden" name="groupTask" value={{i[4]}}>
-                                  <input type="submit" value="View" class="btn btn-info btn-sm"></form>
-                              
+                                  <input type="submit" value="View" class="btn btn-info btn-sm">
+                                </form>
                             </td>
                             </tr>
                             {%endfor%}
@@ -315,7 +323,7 @@
                             {% if msg3 %}
                                 <li class="list-group-item list-group-item-danger text-center mb-3">{{ msg3 }}</li>
                             {% endif %}
-                            
+
                             {%if infos3!=None and msg3==None %}
                             {% for i in infos3 %}
                             <tr>
@@ -326,7 +334,7 @@
                               <td> {{ i[3] }} </td>
                               <td style="color: green;">{{ i[8] }}</td>
                               <td style="color: red;">{{ i[9] }}</td>
-  
+
                               {% if i[10] == 'high' %}
                                   <td><span class="badge badge-pill badge-danger">{{ i[10] }}</span></td>
                               {% endif %}
@@ -334,12 +342,12 @@
                                   <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
                               {% endif %}
                               {% if i[10] == 'low' %}
-                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td>
                               {% endif %}
-  
-                              <td> {{ i[12] }} </td>
+
+                              <td> <span class="badge badge-pill badge-dark">{{ i[12] }}</span> </td>
+
                               <td>
-                              
                                 <form  action="/remarkview1" method="POST" >
                                   <input type="hidden" name="id" value={{i[0]}}>
                                   <input type="hidden" name="taskName" value="{{i[1]}}">
@@ -349,8 +357,8 @@
                                   <input type="hidden" name="role" value="{{i[6]}}">
                                   <input type="hidden" name="dept" value={{i[7]}}>
                                   <input type="hidden" name="groupTask" value={{i[4]}}>
-                                  <input type="submit" value="View" class="btn btn-info btn-sm"></form>
-                              
+                                  <input type="submit" value="View" class="btn btn-info btn-sm">
+                                </form>
                             </td>
                             </tr>
                             {%endfor%}
@@ -365,7 +373,7 @@
         <div class="row mt-5 md-auto">
             <div class="col md-auto">
                 <div class="container table-responsive">
-                    
+
                     <table class="table table-hover" >
                         <thead>
                           <tr>
@@ -395,7 +403,7 @@
                               <td> {{ i[3] }} </td>
                               <td style="color: green;">{{ i[8] }}</td>
                               <td style="color: red;">{{ i[9] }}</td>
-  
+
                               {% if i[10] == 'high' %}
                                   <td><span class="badge badge-pill badge-danger">{{ i[10] }}</span></td>
                               {% endif %}
@@ -403,12 +411,12 @@
                                   <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
                               {% endif %}
                               {% if i[10] == 'low' %}
-                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td>
                               {% endif %}
-  
-                              <td> {{ i[12] }} </td>
+
+                              <td> <span class="badge badge-pill badge-dark">{{ i[12] }}</span> </td>
+
                               <td>
-                              
                                 <form  action="/remarkview1" method="POST" >
                                   <input type="hidden" name="id" value={{i[0]}}>
                                   <input type="hidden" name="taskName" value="{{i[1]}}">
@@ -418,8 +426,8 @@
                                   <input type="hidden" name="role" value="{{i[6]}}">
                                   <input type="hidden" name="dept" value={{i[7]}}>
                                   <input type="hidden" name="groupTask" value={{i[4]}}>
-                                  <input type="submit" value="View" class="btn btn-info btn-sm"></form>
-                              
+                                  <input type="submit" value="View" class="btn btn-info btn-sm">
+                                </form>
                             </td>
                             </tr>
                             {%endfor%}
@@ -434,7 +442,7 @@
         <div class="row mt-5 md-auto">
             <div class="col md-auto">
                 <div class="container table-responsive">
-                    
+
                     <table class="table table-hover" >
                         <thead>
                           <tr>
@@ -464,7 +472,7 @@
                               <td> {{ i[3] }} </td>
                               <td style="color: green;">{{ i[8] }}</td>
                               <td style="color: red;">{{ i[9] }}</td>
-  
+
                               {% if i[10] == 'high' %}
                                   <td><span class="badge badge-pill badge-danger">{{ i[10] }}</span></td>
                               {% endif %}
@@ -472,12 +480,12 @@
                                   <td><span class="badge badge-pill badge-warning">{{ i[10] }}</span></td>
                               {% endif %}
                               {% if i[10] == 'low' %}
-                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td> 
+                                  <td><span class="badge badge-pill badge-success">{{ i[10] }}</span></td>
                               {% endif %}
-  
-                              <td> {{ i[12] }} </td>
+
+                              <td> <span class="badge badge-pill badge-dark">{{ i[12] }}</span> </td>
+
                               <td>
-                              
                                 <form  action="/remarkview1" method="POST" >
                                   <input type="hidden" name="id" value={{i[0]}}>
                                   <input type="hidden" name="taskName" value="{{i[1]}}">
@@ -487,8 +495,8 @@
                                   <input type="hidden" name="role" value="{{i[6]}}">
                                   <input type="hidden" name="dept" value={{i[7]}}>
                                   <input type="hidden" name="groupTask" value={{i[4]}}>
-                                  <input type="submit" value="View" class="btn btn-info btn-sm"></form>
-                              
+                                  <input type="submit" value="View" class="btn btn-info btn-sm">
+                                </form>
                             </td>
                             </tr>
                             {%endfor%}
@@ -501,18 +509,18 @@
       </div>
 
 
-    <div id="chartContainer" style="height: 350px; width: 75%; margin-left: 10%;">abc</div>
+    <div id="chartContainer" style="height: 350px; width: 75%; margin-left: 10%;"></div>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
         <script>
-    
-     function myFunction1() {  
+
+     function myFunction1() {
         var x = document.getElementById("myDIV1");
     var ch = document.getElementById("chartContainer");
     var y = document.getElementById("myDIV2");
     var z = document.getElementById("myDIV3");
     var u= document.getElementById("myDIV4");
     var v = document.getElementById("myDIV5");
-  
+
   if (x.style.display === "none") {
     x.style.display = "block";
     ch.style.display='none';
@@ -524,14 +532,14 @@
     x.style.display = "none";
     ch.style.display='block';
   }}
-  function myFunction2() { 
+  function myFunction2() {
     var x = document.getElementById("myDIV1");
     var ch = document.getElementById("chartContainer");
     var y = document.getElementById("myDIV2");
     var z = document.getElementById("myDIV3");
     var u= document.getElementById("myDIV4");
-    var v = document.getElementById("myDIV5"); 
- 
+    var v = document.getElementById("myDIV5");
+
   if (y.style.display === "none") {
     y.style.display = "block";
     ch.style.display='none';
@@ -543,14 +551,14 @@
     y.style.display = "none";
     ch.style.display='block';
   }}
-  function myFunction3() { 
+  function myFunction3() {
     var x = document.getElementById("myDIV1");
     var ch = document.getElementById("chartContainer");
     var y = document.getElementById("myDIV2");
     var z = document.getElementById("myDIV3");
     var u= document.getElementById("myDIV4");
-    var v = document.getElementById("myDIV5"); 
- 
+    var v = document.getElementById("myDIV5");
+
   if (z.style.display === "none") {
     z.style.display = "block";
     ch.style.display='none';
@@ -562,14 +570,14 @@
     z.style.display = "none";
     ch.style.display='block';
   }}
-  function myFunction4() {  
+  function myFunction4() {
     var x = document.getElementById("myDIV1");
     var ch = document.getElementById("chartContainer");
     var y = document.getElementById("myDIV2");
     var z = document.getElementById("myDIV3");
     var u= document.getElementById("myDIV4");
     var v = document.getElementById("myDIV5");
-  
+
   if (u.style.display === "none") {
     u.style.display = "block";
     ch.style.display='none';
@@ -581,14 +589,14 @@
     u.style.display = "none";
     ch.style.display='block';
   }}
-  function myFunction5() { 
+  function myFunction5() {
     var x = document.getElementById("myDIV1");
     var ch = document.getElementById("chartContainer");
     var y = document.getElementById("myDIV2");
     var z = document.getElementById("myDIV3");
     var u= document.getElementById("myDIV4");
-    var v = document.getElementById("myDIV5"); 
-  
+    var v = document.getElementById("myDIV5");
+
   if (v.style.display === "none") {
     v.style.display = "block";
     ch.style.display='none';

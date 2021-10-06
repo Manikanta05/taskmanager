@@ -9,41 +9,61 @@
   <style>
     body{
       overflow-x: hidden;
-      background-color: rgb(255, 248, 245);
     }
-    img{
-      border-radius: 50%;
-      margin-bottom: 8%;
-      box-shadow: 2px 5px 10px black;
+    .card{
+      box-shadow: 2px 3px 7px black;
+    }
+    @media (max-width:600px) {
+      .card{
+        margin-left: 8%;
+      }
     }
   </style>
 </head>
 <body>
-  <h1 class="text-center mt-5 display-1">Support Team</h1><br>
+  <h1 class="text-center mt-2 display-3">Support Team</h1><br>
 
-  <div class="mt-5 ml-4">
-    <div class="row">
-      <div class="col col-lg-3">
-        <img class="mx-auto d-block" height="300vh" width="300vw" src="../static/images/akhil.jpg" alt="Akhil">
-        <h4 class="text-center">Akhil Harwadekar</h4>
-        <p class="text-center text-muted">Dept. of Computer Science and Engineering <br> JSS Academy of Technical Education</p><br>
+  <div class="mt-3 container">
+    <div class="card-deck">
+      <div class="card mb-5" style="width: 18rem;">
+        <img class="card-img-top" height="300vh" src="../static/images/akhil.jpg" alt="Akhil">
+        <div class="card-body">
+          <h5 class="card-title text-center">AKHIL HARWADEKAR</h5>
+          <p class="card-text text-center text-muted">Department of Computer Science and Engineering <br><br> JSS Academy of Technical Education Bengaluru</p>
+        </div><br>
       </div>
-      <div class="col col-lg-3">
-        <img class="mx-auto d-block" height="300vh" width="300vw" src="../static/images/manikanta.jpg" alt="Manikanta">
-        <h4 class="text-center">Manikanta B</h4>
-        <p class="text-center text-muted">Dept. of Computer Science and Engineering <br> JSS Academy of Technical Education</p><br>
+
+      <div class="card mb-5" style="width: 18rem;">
+        <img class="card-img-top" height="300vh" src="../static/images/manikanta.jpg" alt="Manikanta">
+        <div class="card-body">
+          <h5 class="card-title text-center">MANIKANTA B</h5>
+          <p class="card-text text-center text-muted">Department of Computer Science and Engineering <br><br> JSS Academy of Technical Education Bengaluru</p>
+        </div>
       </div>
-      <div class="col col-lg-3">
-        <img class="mx-auto d-block" height="300vh" width="300vw" src="../static/images/rach2.jpeg" alt="Rachana">
-        <h4 class="text-center">Rachana Kulkarni</h4>
-        <p class="text-center text-muted">Dept. of Computer Science and Engineering <br> JSS Academy of Technical Education</p><br>
+
+      <div class="card mb-5" style="width: 18rem;">
+        <img class="card-img-top" height="300vh" src="../static/images/rach2.jpeg" alt="Rachana">
+        <div class="card-body">
+          <h5 class="card-title text-center">RACHANA KULKARNI</h5>
+          <p class="card-text text-center text-muted">Department of Computer Science and Engineering <br><br> JSS Academy of Technical Education Bengaluru</p>
+        </div>
       </div>
-      <div class="col col-lg-3">
-        <img class="mx-auto d-block" height="300vh" width="300vw" src="../static/images/san.jpeg" alt="Sadhya">
-        <h4 class="text-center">Sandhya P</h4>
-        <p class="text-center text-muted">Dept. of Computer Science and Engineering <br> JSS Academy of Technical Education</p><br>
+
+      <div class="card mb-5" style="width: 18rem;">
+        <img class="card-img-top" height="300vh" src="../static/images/san.jpeg" alt="Sadhya">
+        <div class="card-body">
+          <h5 class="card-title text-center">SANDHYA P</h5>
+          <p class="card-text text-center text-muted">Department of Computer Science and Engineering <br><br> JSS Academy of Technical Education Bengaluru</p>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div class="container">
+    <footer>
+        <p class="text-center text-muted col-11"><b>Faculty: Dr. Naveen N C(HOD, CSE) and &nbsp; Mrs. Ranjitha S R(Asst. Professor, CSE)</b></p>
+        <p class="text-center text-muted col-11">For any queries mail to: <a href="mailto:elitecoders.jss@gmail.com"> elitecoders.jss@gmail.com</a></p>
+    </footer>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
